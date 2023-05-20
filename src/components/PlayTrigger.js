@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import Play from './Play'
-import Pause from './Pause'
 import { useEffect, useState } from 'react';
+import PausePlay from "./PausePlay";
 
 const Root = styled.div`
   width: 50%;
@@ -46,7 +45,7 @@ const PlayTrigger = ({play, togglePause}) => {
     }, 500);
   }, [play])
 
-  return <Root onClick={togglePause}><IconWrapper>{!play ? <Play/> : <Pause />}</IconWrapper></Root>
+  return <Root onClick={togglePause}><IconWrapper> <PausePlay play={play} /></IconWrapper></Root>
 }
 
 export default PlayTrigger;

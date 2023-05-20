@@ -7,8 +7,8 @@ const Root = styled.div`
 `;
 
 
-const PausePlay = ({play, togglePause}) => {
-  return <Root onClick={togglePause}>{!play ? <Play/> : <Pause />}</Root>
+const PausePlay = ({play}) => {
+  return <Root>{!play ? <Play/> : <Pause />}</Root>
 }
 
 export default PausePlay;

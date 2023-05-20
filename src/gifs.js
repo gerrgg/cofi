@@ -4,6 +4,9 @@ const gifs = [
   },
   {
     "filename": "typing.gif"
+  },
+  {
+    "filename": "taco-dance.gif"
   }
 ]
 

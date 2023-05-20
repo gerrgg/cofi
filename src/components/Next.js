@@ -9,10 +9,10 @@ const Svg = styled(Icon)`
   cursor: pointer;
 `
 
-const Pause = ({ className }) => ( 
+const Next = ({ className }) => ( 
   <Svg viewBox="0 0 24 24" className={className}>   
-    <path fill="currentcolor" d="M10 24h-6v-24h6v24zm10 0h-6v-24h6v24zm-11-23h-4v22h4v-22zm10 0h-4v22h4v-22z"/>
+    <path fill="currentcolor" d="M10.024 4h6.015l7.961 8-7.961 8h-6.015l7.961-8-7.961-8zm-10.024 16h6.015l7.961-8-7.961-8h-6.015l7.961 8-7.961 8z"/>
   </Svg>
 )
 
-export default Pause;
+export default Next;

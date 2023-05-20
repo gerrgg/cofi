@@ -7,20 +7,27 @@ import Controls from './components/Controls';
 import Welcome from './components/Welcome';
 import PlayTrigger from './components/PlayTrigger';
 import gifs from './gifs';
-
+import videos from './videos';
 
 let videoElement = null;
 
-const Root = styled.main`width: 100vw; height: 100vh;`;
+const Root = styled.main`width: 100vw; height: 100vh; background: #333`;
 
 const App = () => {
   const [play, setPlay] = useState(false);
   const [init, setInit] = useState(false);
   const [activeGifIndex, setActiveGifIndex] = useState(0);
-  const [activeGif, setActiveGif] = useState(gifs[activeGifIndex].filename);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [videoStatus, setVideoStatus] = useState(-1);
 
   const handleShuffleGif = () => {
-    setActiveGifIndex(activeGifIndex + 1 > gifs.length ? 0 : activeGifIndex + 1);
+    const random = Math.floor(Math.random() * gifs.length);
+    random !== activeGifIndex ? setActiveGifIndex(random) : handleShuffleGif();
+  }
+  
+  const handleShuffleVideo = () => {
+    setActiveGifIndex(activeGifIndex + 1 >= gifs.length ? 0 : activeGifIndex + 1);
+    setCurrentVideoIndex(currentVideoIndex + 1 >= videos.length ? 0 : currentVideoIndex + 1);
   }
 
   const togglePause = () => {
@@ -37,10 +44,11 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (videoElement) {
-      play ? videoElement.target.playVideo() : videoElement.target.pauseVideo();
-    }
-  }, [play]);
+    if( videoElement === null ) return;
+
+    play ? videoElement.target.playVideo() : videoElement.target.pauseVideo();
+    
+  }, [play, videoStatus]);
 
   const _onReady = (event) => {
     if( event.target ){
@@ -48,13 +56,24 @@ const App = () => {
     }
   };
 
+  const _onStateChange = (event) => {
+    console.log(event.data);
+    setVideoStatus(event.data);
+  };
+
+
   return (
     <Root>
       <PlayTrigger play={play} togglePause={togglePause} />
-      <YouTube style={{zIndex: -10, position: 'relative'}} videoId={"cbuZfY2S2UQ"} opts={opts} onReady={_onReady} />
-      <Gif activeGif={activeGif} play={play} />
+      <YouTube style={{zIndex: 1, position: 'relative'}} videoId={videos[currentVideoIndex].id} opts={opts} onReady={_onReady} onStateChange={_onStateChange} />
+      <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
       {
-        init ? <Controls play={play} togglePause={togglePause} handleShuffleGif={handleShuffleGif} /> : <Welcome />
+        init ? <Controls 
+                play={play} 
+                togglePause={togglePause} 
+                handleShuffleGif={handleShuffleGif} 
+                handleShuffleVideo={handleShuffleVideo} 
+               /> : <Welcome />
       }
     </Root>
   );

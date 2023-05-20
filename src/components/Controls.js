@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import PausePlay from "./PausePlay";
 import Shuffle from "./Shuffle";
+import Next from "./Next";
 
 const Root = styled.div`
   position: absolute;
@@ -12,12 +13,18 @@ const Root = styled.div`
   gap: 15px;
 `;
 
-const Controls = ({play, togglePause, handleShuffleGif}) => {
-  console.log(play, togglePause, handleShuffleGif);
-  return <Root>
-    <PausePlay onClick={togglePause} play={play} />
-    <Shuffle onClick={handleShuffleGif} />
-    </Root>
+const Controls = ({play, togglePause, handleShuffleGif, handleShuffleVideo}) => {
+  return (<Root>
+    <div onClick={togglePause}>
+      <PausePlay play={play} />
+    </div>
+    <div onClick={handleShuffleGif}>
+      <Shuffle />
+    </div>
+    <div onClick={handleShuffleVideo}>
+      <Next />
+    </div>
+    </Root>)
 }
 
 export default Controls;
