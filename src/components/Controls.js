@@ -2,6 +2,7 @@ import styled from "styled-components";
 import PausePlay from "./PausePlay";
 import Shuffle from "./Shuffle";
 import Next from "./Next";
+import Volume from "./Volume";
 
 const Root = styled.div`
   position: absolute;
@@ -13,7 +14,7 @@ const Root = styled.div`
   gap: 15px;
 `;
 
-const Controls = ({play, togglePause, handleShuffleGif, handleShuffleVideo}) => {
+const Controls = ({play, togglePause, handleShuffleGif, handleShuffleVideo, setVolumeLevel, volumeLevel}) => {
   return (<Root>
     <div onClick={togglePause}>
       <PausePlay play={play} />
@@ -24,6 +25,7 @@ const Controls = ({play, togglePause, handleShuffleGif, handleShuffleVideo}) => 
     <div onClick={handleShuffleVideo}>
       <Next />
     </div>
+    <Volume volumeLevel={volumeLevel} setVolumeLevel={setVolumeLevel}  />
     </Root>)
 }
 

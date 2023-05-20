@@ -19,6 +19,7 @@ const App = () => {
   const [activeGifIndex, setActiveGifIndex] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [videoStatus, setVideoStatus] = useState(-1);
+  const [volumeLevel, setVolumeLevel] = useState(10);
 
   const handleShuffleGif = () => {
     const random = Math.floor(Math.random() * gifs.length);
@@ -45,9 +46,7 @@ const App = () => {
 
   useEffect(() => {
     if( videoElement === null ) return;
-
     play ? videoElement.target.playVideo() : videoElement.target.pauseVideo();
-    
   }, [play, videoStatus]);
 
   const _onReady = (event) => {
@@ -57,8 +56,11 @@ const App = () => {
   };
 
   const _onStateChange = (event) => {
-    console.log(event.data);
     setVideoStatus(event.data);
+
+    if( event.data === 0 ){
+      handleShuffleVideo();
+    }
   };
 
 
@@ -72,7 +74,9 @@ const App = () => {
                 play={play} 
                 togglePause={togglePause} 
                 handleShuffleGif={handleShuffleGif} 
-                handleShuffleVideo={handleShuffleVideo} 
+                handleShuffleVideo={handleShuffleVideo}
+                volumeLevel={volumeLevel}
+                setVolumeLevel={setVolumeLevel}
                /> : <Welcome />
       }
     </Root>
