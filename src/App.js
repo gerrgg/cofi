@@ -9,6 +9,7 @@ import Lines from "./components/Lines";
 import gifs from "./gifs";
 import videos from "./videos";
 import Static from "./components/Static";
+import Playlist from "./components/Playlist";
 import useSound from "use-sound";
 
 let videoElement = null;
@@ -43,19 +44,40 @@ const App = () => {
   const [videoStatus, setVideoStatus] = useState(-1);
   const [volumeLevel, setVolumeLevel] = useState(10);
   const [videoTitle, setVideoTitle] = useState(null);
+  const [showPlaylist, setShowPlaylist] = useState(false);
+
+  const handleShowPlaylist = () => {
+    setShowPlaylist(!showPlaylist);
+  };
 
   const handleShuffleGif = () => {
     const random = Math.floor(Math.random() * gifs.length);
     random !== activeGifIndex ? setActiveGifIndex(random) : handleShuffleGif();
   };
 
-  const handleShuffleVideo = () => {
+  const handleNextVideo = () => {
     setActiveGifIndex(
       activeGifIndex + 1 >= gifs.length ? 0 : activeGifIndex + 1
     );
     setCurrentVideoIndex(
       currentVideoIndex + 1 >= videos.length ? 0 : currentVideoIndex + 1
     );
+
+    setVideoTitle(null);
+    playStatic();
+    setReady(false);
+  };
+
+  const handleSetVideo = (id) => {
+    console.log(videos, id);
+    let index = null;
+
+    videos.forEach((video, i) => {
+      if (video.id === id) index = i;
+    });
+
+    setActiveGifIndex(index);
+    setCurrentVideoIndex(index);
 
     setVideoTitle(null);
     playStatic();
@@ -96,8 +118,8 @@ const App = () => {
   // buggy
   useEffect(() => {
     try {
-      play ? videoElement.target.playVideo() : videoElement.target.pauseVideo();
-      handleSetVolume(Math.ceil(videoElement.target.getVolume() / 10));
+      play ? videoElement.target.playVideo() : videoElement.target.pauseVideo(); // pause/play
+      videoElement.target.setVolume(volumeLevel * 10); // set volume of video to match state
     } catch (e) {
       console.log(e, videoElement);
     }
@@ -118,7 +140,18 @@ const App = () => {
 
   return (
     <Root>
-      <PlayTrigger ready={ready} play={play} togglePause={togglePause} />
+      <Playlist
+        videos={videos}
+        showPlaylist={showPlaylist}
+        handleShowPlaylist={handleShowPlaylist}
+        activeVideo={videos[currentVideoIndex].id}
+        handleSetVideo={handleSetVideo}
+      />
+      <PlayTrigger
+        ready={ready && showPlaylist === false}
+        play={play}
+        togglePause={togglePause}
+      />
       <VideoWrapper>
         <YouTube
           style={{ zIndex: 1, position: "relative" }}
@@ -126,7 +159,7 @@ const App = () => {
           opts={opts}
           onReady={_onReady}
           onStateChange={_onStateChange}
-          onEnd={handleShuffleVideo}
+          onEnd={handleNextVideo}
         />
       </VideoWrapper>
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
@@ -137,10 +170,11 @@ const App = () => {
           play={play}
           togglePause={togglePause}
           handleShuffleGif={handleShuffleGif}
-          handleShuffleVideo={handleShuffleVideo}
+          handleNextVideo={handleNextVideo}
           volumeLevel={volumeLevel}
           handleSetVolume={handleSetVolume}
           videoTitle={videoTitle}
+          handleShowPlaylist={handleShowPlaylist}
         />
       ) : (
         <Welcome ready={ready} />

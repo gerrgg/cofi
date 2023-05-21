@@ -10,7 +10,7 @@ const Root = styled.div`
   position: absolute;
   bottom: 1rem;
   left: 1rem;
-  z-index: 100;
+  z-index: 12;
   color: #fff;
 `;
 
@@ -20,6 +20,7 @@ const Title = styled.h1`
   font-size: 14px;
   margin-bottom: 15px;
   max-width: 400px;
+  cursor: pointer;
 `;
 
 const Row = styled.div`
@@ -31,10 +32,11 @@ const Controls = ({
   play,
   togglePause,
   handleShuffleGif,
-  handleShuffleVideo,
+  handleNextVideo,
   handleSetVolume,
   volumeLevel,
   videoTitle,
+  handleShowPlaylist,
 }) => {
   const [playShuffle] = useSound("/sounds/shuffle.wav", {
     volume: 0.5,
@@ -47,7 +49,7 @@ const Controls = ({
 
   return (
     <Root>
-      <Title>{videoTitle}</Title>
+      <Title onClick={handleShowPlaylist}>{videoTitle}</Title>
       <Row>
         <div onClick={togglePause}>
           <PausePlay play={play} />
@@ -55,7 +57,7 @@ const Controls = ({
         <div onClick={handleShuffleClick}>
           <Shuffle />
         </div>
-        <div onClick={handleShuffleVideo}>
+        <div onClick={handleNextVideo}>
           <Next />
         </div>
         <Volume volumeLevel={volumeLevel} handleSetVolume={handleSetVolume} />
