@@ -17,7 +17,7 @@ const Root = styled.div`
 const Title = styled.h1`
   color: #fff;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   margin-bottom: 15px;
   max-width: 400px;
 `;

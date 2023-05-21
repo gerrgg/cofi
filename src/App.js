@@ -17,6 +17,21 @@ const Root = styled.main`
   width: 100vw;
   height: 100vh;
   background: #333;
+  overflow: hidden;
+  font-family: "Press Start 2P", cursive;
+
+  * {
+    text-shadow: 2px 2px black;
+  }
+`;
+
+const VideoWrapper = styled.div`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  width: 1px;
+  overflow hidden;
 `;
 
 const App = () => {
@@ -53,10 +68,6 @@ const App = () => {
 
   const [playBoop] = useSound("/sounds/boop.wav", {
     volume: 0.25,
-  });
-
-  const [playVolume] = useSound("/sounds/volume.wav", {
-    volume: 0.5,
   });
 
   const handleSetVolume = (level) => {
@@ -108,14 +119,16 @@ const App = () => {
   return (
     <Root>
       <PlayTrigger ready={ready} play={play} togglePause={togglePause} />
-      <YouTube
-        style={{ zIndex: 1, position: "relative" }}
-        videoId={videos[currentVideoIndex].id}
-        opts={opts}
-        onReady={_onReady}
-        onStateChange={_onStateChange}
-        onEnd={handleShuffleVideo}
-      />
+      <VideoWrapper>
+        <YouTube
+          style={{ zIndex: 1, position: "relative" }}
+          videoId={videos[currentVideoIndex].id}
+          opts={opts}
+          onReady={_onReady}
+          onStateChange={_onStateChange}
+          onEnd={handleShuffleVideo}
+        />
+      </VideoWrapper>
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
       <Lines />
       <Static ready={ready} />
