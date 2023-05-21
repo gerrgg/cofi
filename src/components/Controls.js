@@ -3,6 +3,7 @@ import PausePlay from "./PausePlay";
 import Shuffle from "./Shuffle";
 import Next from "./Next";
 import Volume from "./Volume";
+import useSound from "use-sound";
 import { TypeAnimation } from "react-type-animation";
 
 const Root = styled.div`
@@ -35,6 +36,15 @@ const Controls = ({
   volumeLevel,
   videoTitle,
 }) => {
+  const [playShuffle] = useSound("/sounds/shuffle.wav", {
+    volume: 0.5,
+  });
+
+  const handleShuffleClick = () => {
+    playShuffle();
+    handleShuffleGif();
+  };
+
   return (
     <Root>
       <Title>{videoTitle}</Title>
@@ -42,7 +52,7 @@ const Controls = ({
         <div onClick={togglePause}>
           <PausePlay play={play} />
         </div>
-        <div onClick={handleShuffleGif}>
+        <div onClick={handleShuffleClick}>
           <Shuffle />
         </div>
         <div onClick={handleShuffleVideo}>

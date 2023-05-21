@@ -9,25 +9,27 @@ const Root = styled.div`
   color: #fff;
 `;
 
-const Controls = () => {
+const Controls = ({ ready }) => {
   return (
     <Root>
-      <TypeAnimation
-        sequence={[
-          // Same String at the start will only be typed once, initially
-          "Press any key to start",
-          1000,
-          "Press any key to commence coding",
-          1000,
-          "Press any key to get this party started",
-          1000,
-          "Press any key to get in the zone",
-          1000,
-        ]}
-        speed={25}
-        style={{ fontWeight: "bold" }}
-        repeat={Infinity}
-      />
+      {ready ? (
+        <TypeAnimation
+          sequence={[
+            // Same String at the start will only be typed once, initially
+            "Press any key to start",
+            1000,
+            "Press any key to commence coding",
+            1000,
+            "Press any key to get this party started",
+            1000,
+            "Press any key to get in the zone",
+            1000,
+          ]}
+          speed={25}
+          style={{ fontWeight: "bold" }}
+          repeat={Infinity}
+        />
+      ) : null}
     </Root>
   );
 };

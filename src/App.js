@@ -5,8 +5,11 @@ import Gif from "./components/Gif";
 import Controls from "./components/Controls";
 import Welcome from "./components/Welcome";
 import PlayTrigger from "./components/PlayTrigger";
+import Lines from "./components/Lines";
 import gifs from "./gifs";
 import videos from "./videos";
+import Static from "./components/Static";
+import useSound from "use-sound";
 
 let videoElement = null;
 
@@ -19,6 +22,7 @@ const Root = styled.main`
 const App = () => {
   const [play, setPlay] = useState(false);
   const [init, setInit] = useState(false);
+  const [ready, setReady] = useState(false);
   const [activeGifIndex, setActiveGifIndex] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [videoStatus, setVideoStatus] = useState(-1);
@@ -39,7 +43,21 @@ const App = () => {
     );
 
     setVideoTitle(null);
+    playStatic();
+    setReady(false);
   };
+
+  const [playStatic, { stop }] = useSound("/sounds/static.mp3", {
+    volume: 0.5,
+  });
+
+  const [playBoop] = useSound("/sounds/boop.wav", {
+    volume: 0.25,
+  });
+
+  const [playVolume] = useSound("/sounds/volume.wav", {
+    volume: 0.5,
+  });
 
   const handleSetVolume = (level) => {
     try {
@@ -55,6 +73,7 @@ const App = () => {
       setInit(true);
     }
     setPlay(!play);
+    playBoop();
   };
 
   const opts = {
@@ -67,39 +86,39 @@ const App = () => {
   useEffect(() => {
     try {
       play ? videoElement.target.playVideo() : videoElement.target.pauseVideo();
+      handleSetVolume(Math.ceil(videoElement.target.getVolume() / 10));
     } catch (e) {
-      console.log(e);
+      console.log(e, videoElement);
     }
   }, [play, videoStatus]);
 
   const _onReady = (event) => {
     if (event.target) {
-      videoElement = event;
+      setReady(true); // allow interaction again
+      stop(); // stop static sound
+      videoElement = event; // assign new event to videoElement
     }
   };
 
   const _onStateChange = (event) => {
     setVideoStatus(event.data);
-
     setVideoTitle(event.target.videoTitle);
-    console.log(event.target.videoTitle);
-
-    if (event.data === 0) {
-      handleShuffleVideo();
-    }
   };
 
   return (
     <Root>
-      <PlayTrigger play={play} togglePause={togglePause} />
+      <PlayTrigger ready={ready} play={play} togglePause={togglePause} />
       <YouTube
         style={{ zIndex: 1, position: "relative" }}
         videoId={videos[currentVideoIndex].id}
         opts={opts}
         onReady={_onReady}
         onStateChange={_onStateChange}
+        onEnd={handleShuffleVideo}
       />
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
+      <Lines />
+      <Static ready={ready} />
       {init ? (
         <Controls
           play={play}
@@ -111,7 +130,7 @@ const App = () => {
           videoTitle={videoTitle}
         />
       ) : (
-        <Welcome />
+        <Welcome ready={ready} />
       )}
     </Root>
   );

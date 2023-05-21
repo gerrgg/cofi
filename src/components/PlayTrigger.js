@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import styled from "styled-components";
+import { useEffect, useState } from "react";
 import PausePlay from "./PausePlay";
 
 const Root = styled.div`
@@ -13,6 +13,8 @@ const Root = styled.div`
   transform: translate(-50%, -50%);
   z-index: 100;
   cursor: pointer;
+  display: ${(props) => (props.ready ? "block" : "none")};
+  pointer-events: ${(props) => (props.ready ? "all" : "none")};
 `;
 
 const IconWrapper = styled.div`
@@ -27,25 +29,31 @@ display: flex;
 justify-content: center;
 align-items: center;
 color: #fff;
-opacity: ${props => props.show ? '1' : '0'};
-transition: opacity ${props => props.show ? '0s' : '0.5s'}; ease-in-out;
+opacity: ${(props) => (props.show ? "1" : "0")};
+transition: opacity ${(props) => (props.show ? "0s" : "0.5s")}; ease-in-out;
 
 &:hover{
   opacity: 1;
 }
 `;
 
-const PlayTrigger = ({play, togglePause}) => {
+const PlayTrigger = ({ play, togglePause, ready }) => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    setShow(true)
+    setShow(true);
     setTimeout(() => {
-      setShow(false)
+      setShow(false);
     }, 500);
-  }, [play])
+  }, [play]);
 
-  return <Root onClick={togglePause}><IconWrapper> <PausePlay play={play} /></IconWrapper></Root>
-}
+  return (
+    <Root ready={ready} onClick={togglePause}>
+      <IconWrapper>
+        <PausePlay play={play} />
+      </IconWrapper>
+    </Root>
+  );
+};
 
 export default PlayTrigger;
