@@ -1,6 +1,6 @@
 const videos = [
   {
-    "id": "XLufvfM7WJ8"
+    "id": "GNWLILeztaI"
   },
   {
     "id": "EgwQG3MYp3o"
@@ -26,10 +26,6 @@ const videos = [
   {
     "id": "4VPRYsXsmrs"
   },
-  {
-    "id": "GNWLILeztaI"
-  },
-  
 ]
 
 export default videos;
