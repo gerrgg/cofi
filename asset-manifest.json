@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/cofi/static/css/main.f8fea764.css",
+    "main.js": "/cofi/static/js/main.95aa1f1b.js",
+    "static/js/845.cb29078e.chunk.js": "/cofi/static/js/845.cb29078e.chunk.js",
+    "index.html": "/cofi/index.html",
+    "main.f8fea764.css.map": "/cofi/static/css/main.f8fea764.css.map",
+    "main.95aa1f1b.js.map": "/cofi/static/js/main.95aa1f1b.js.map",
+    "845.cb29078e.chunk.js.map": "/cofi/static/js/845.cb29078e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f8fea764.css",
+    "static/js/main.95aa1f1b.js"
+  ]
+}
