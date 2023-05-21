@@ -4,14 +4,9 @@
 
 ### Video
 
-- Detect when a video ends and play the next
-- Support playlists
-
 ### Controls
 
 ### Gifs
-
-- Add a tie a perfered gif to videos (optional)
 
 ### QOL
 

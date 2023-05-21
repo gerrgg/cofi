@@ -76,7 +76,7 @@ const App = () => {
       if (video.id === id) index = i;
     });
 
-    setActiveGifIndex(index);
+    handleShuffleGif();
     setCurrentVideoIndex(index);
 
     setVideoTitle(null);
