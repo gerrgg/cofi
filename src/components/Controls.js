@@ -29,6 +29,7 @@ const Row = styled.div`
 `;
 
 const Controls = ({
+  videos,
   play,
   togglePause,
   handleShuffleGif,
@@ -57,9 +58,11 @@ const Controls = ({
         <div onClick={handleShuffleClick}>
           <Shuffle />
         </div>
-        <div onClick={handleNextVideo}>
-          <Next />
-        </div>
+        {videos.length > 0 ? (
+          <div onClick={handleNextVideo}>
+            <Next />
+          </div>
+        ) : null}
         <Volume volumeLevel={volumeLevel} handleSetVolume={handleSetVolume} />
       </Row>
     </Root>

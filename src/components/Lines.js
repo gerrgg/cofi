@@ -19,7 +19,7 @@ const Root = styled.div`
       background-position-y: 0px;
     }
     100% {
-      background-position-y: 200%;
+      background-position-y: 100%;
     }
   }
   animation: moveDownAnimation 150s linear infinite;

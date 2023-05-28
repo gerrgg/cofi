@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import useSound from "use-sound";
+import axios from "axios";
+
 import YouTube from "react-youtube";
 import Gif from "./components/Gif";
 import Controls from "./components/Controls";
@@ -7,10 +10,9 @@ import Welcome from "./components/Welcome";
 import PlayTrigger from "./components/PlayTrigger";
 import Lines from "./components/Lines";
 import gifs from "./gifs";
-import videos from "./videos";
 import Static from "./components/Static";
 import Playlist from "./components/Playlist";
-import useSound from "use-sound";
+import UserControls from "./components/UserControls";
 
 let videoElement = null;
 
@@ -45,6 +47,18 @@ const App = () => {
   const [volumeLevel, setVolumeLevel] = useState(10);
   const [videoTitle, setVideoTitle] = useState(null);
   const [showPlaylist, setShowPlaylist] = useState(false);
+  const [videos, setVideos] = useState(null);
+
+  // use default playlist by default
+  const [activePlaylist, setActivePlaylist] = useState(
+    "647292a106b18a4d7c802c7e"
+  );
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/api/playlists/${activePlaylist}`)
+      .then((response) => setVideos(response.data.videos));
+  }, []);
 
   const handleShowPlaylist = () => {
     setShowPlaylist(!showPlaylist);
@@ -68,12 +82,11 @@ const App = () => {
     setReady(false);
   };
 
-  const handleSetVideo = (id) => {
-    console.log(videos, id);
+  const handleSetVideo = (key) => {
     let index = null;
 
     videos.forEach((video, i) => {
-      if (video.id === id) index = i;
+      if (video.key === key) index = i;
     });
 
     handleShuffleGif();
@@ -85,7 +98,7 @@ const App = () => {
   };
 
   const [playStatic, { stop }] = useSound("/sounds/static.mp3", {
-    volume: 0.5,
+    volume: 0.25,
   });
 
   const [playBoop] = useSound("/sounds/boop.wav", {
@@ -117,13 +130,17 @@ const App = () => {
 
   // buggy
   useEffect(() => {
-    try {
-      play ? videoElement.target.playVideo() : videoElement.target.pauseVideo(); // pause/play
-      videoElement.target.setVolume(volumeLevel * 10); // set volume of video to match state
-    } catch (e) {
-      console.log(e, videoElement);
+    if (videos && videoElement) {
+      try {
+        play
+          ? videoElement.target.playVideo()
+          : videoElement.target.pauseVideo(); // pause/play
+        videoElement.target.setVolume(volumeLevel * 10); // set volume of video to match state
+      } catch (e) {
+        console.log(e, videoElement);
+      }
     }
-  }, [play, videoStatus]);
+  }, [play, videoStatus, videos]);
 
   const _onReady = (event) => {
     if (event.target) {
@@ -138,35 +155,45 @@ const App = () => {
     setVideoTitle(event.target.videoTitle);
   };
 
+  const handleKeyDown = (e) => {
+    console.log(e);
+  };
+
   return (
-    <Root>
-      <Playlist
-        videos={videos}
-        showPlaylist={showPlaylist}
-        handleShowPlaylist={handleShowPlaylist}
-        activeVideo={videos[currentVideoIndex].id}
-        handleSetVideo={handleSetVideo}
-      />
+    <Root onKeyDown={handleKeyDown}>
+      {videos ? (
+        <Playlist
+          videos={videos}
+          showPlaylist={showPlaylist}
+          handleShowPlaylist={handleShowPlaylist}
+          activeVideo={videos[currentVideoIndex].key}
+          handleSetVideo={handleSetVideo}
+        />
+      ) : null}
       <PlayTrigger
         ready={ready && showPlaylist === false}
         play={play}
         togglePause={togglePause}
       />
       <VideoWrapper>
-        <YouTube
-          style={{ zIndex: 1, position: "relative" }}
-          videoId={videos[currentVideoIndex].id}
-          opts={opts}
-          onReady={_onReady}
-          onStateChange={_onStateChange}
-          onEnd={handleNextVideo}
-        />
+        {videos ? (
+          <YouTube
+            style={{ zIndex: 1, position: "relative" }}
+            videoId={videos[currentVideoIndex].key}
+            opts={opts}
+            onReady={_onReady}
+            onStateChange={_onStateChange}
+            onEnd={handleNextVideo}
+          />
+        ) : null}
       </VideoWrapper>
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
       <Lines />
       <Static ready={ready} />
+      <UserControls />
       {init ? (
         <Controls
+          videos={videos}
           play={play}
           togglePause={togglePause}
           handleShuffleGif={handleShuffleGif}

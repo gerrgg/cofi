@@ -38,10 +38,10 @@ const Playlist = ({
       <PlaylistWrapper>
         {videos.map((video) => (
           <PlaylistVideo
-            key={video.id}
+            key={video.key}
             video={video}
             handleSetVideo={handleSetVideo}
-            active={activeVideo === video.id}
+            active={activeVideo === video.key}
           />
         ))}
       </PlaylistWrapper>
