@@ -19,7 +19,6 @@ const Root = styled.div`
 `;
 
 const PlaylistVideo = ({ video, active, handleSetVideo }) => {
-  console.log(video);
   return (
     <Root active={active} onClick={() => handleSetVideo(video.key)}>
       <img

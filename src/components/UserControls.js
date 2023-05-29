@@ -13,13 +13,14 @@ const Root = styled.div`
 const Row = styled.div`
   display: flex;
   gap: 15px;
+  align-items: center;
 `;
 
-const UserControls = () => {
+const UserControls = ({ handleUserIconClick, user }) => {
   return (
     <Root>
       <Row>
-        <div>
+        <div onClick={handleUserIconClick}>
           <UserIcon />
         </div>
       </Row>

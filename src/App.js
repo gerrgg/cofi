@@ -13,6 +13,7 @@ import gifs from "./gifs";
 import Static from "./components/Static";
 import Playlist from "./components/Playlist";
 import UserControls from "./components/UserControls";
+import UserModal from "./components/UserModal";
 
 let videoElement = null;
 
@@ -48,6 +49,8 @@ const App = () => {
   const [videoTitle, setVideoTitle] = useState(null);
   const [showPlaylist, setShowPlaylist] = useState(false);
   const [videos, setVideos] = useState(null);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [user, setUser] = useState(null);
 
   // use default playlist by default
   const [activePlaylist, setActivePlaylist] = useState(
@@ -59,6 +62,10 @@ const App = () => {
       .get(`http://localhost:3001/api/playlists/${activePlaylist}`)
       .then((response) => setVideos(response.data.videos));
   }, []);
+
+  const handleUserIconClick = () => {
+    setShowUserModal(!showUserModal);
+  };
 
   const handleShowPlaylist = () => {
     setShowPlaylist(!showPlaylist);
@@ -190,7 +197,17 @@ const App = () => {
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
       <Lines />
       <Static ready={ready} />
-      <UserControls />
+      <UserControls
+        handleUserIconClick={handleUserIconClick}
+        showUserModal={showUserModal}
+        user={user}
+      />
+      <UserModal
+        setShowUserModal={setShowUserModal}
+        showUserModal={showUserModal}
+        setUser={setUser}
+        user={user}
+      />
       {init ? (
         <Controls
           videos={videos}
