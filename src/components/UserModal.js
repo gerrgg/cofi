@@ -3,6 +3,7 @@ import RegisterForm from "../components/RegisterForm";
 import LoginForm from "./LoginForm";
 
 import { useState } from "react";
+import EditUserForm from "./EditUserForm";
 const Root = styled.div`
   width: 100vw;
   height: 100vh;
@@ -21,9 +22,15 @@ const Root = styled.div`
   cursor: ${(props) => (props.showModal ? "pointer" : "auto")};
 `;
 
+const SuccessMessage = styled.span`
+  color: lightgreen;
+  font-size: 12px;
+  font-style: italic;
+`;
+
 const UserModal = ({ setShowUserModal, showUserModal, setUser, user }) => {
   const [activeForm, setActiveForm] = useState("login");
-
+  const [successMessage, setSuccessMessage] = useState("test");
   return (
     <Root
       onClick={() => {
@@ -31,14 +38,26 @@ const UserModal = ({ setShowUserModal, showUserModal, setUser, user }) => {
       }}
       showModal={showUserModal}
     >
-      {activeForm === "login" ? (
-        <LoginForm
+      {!user ? (
+        activeForm === "login" ? (
+          <LoginForm
+            setUser={setUser}
+            setActiveForm={setActiveForm}
+            setShowUserModal={setShowUserModal}
+            successMessage={successMessage}
+          />
+        ) : (
+          <RegisterForm
+            setActiveForm={setActiveForm}
+            setSuccessMessage={setSuccessMessage}
+          />
+        )
+      ) : (
+        <EditUserForm
+          user={user}
           setUser={setUser}
-          setActiveForm={setActiveForm}
           setShowUserModal={setShowUserModal}
         />
-      ) : (
-        <RegisterForm setActiveForm={setActiveForm} />
       )}
     </Root>
   );

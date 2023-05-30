@@ -3,6 +3,7 @@ import { useState } from "react";
 import Input from "./Input";
 import { useEffect } from "react";
 import loginService from "../services/login";
+import userService from "../services/user";
 
 const Root = styled.div`
   width: 600px;
@@ -75,7 +76,22 @@ const ErrorMessage = styled.span`
   font-style: italic;
 `;
 
-const LoginForm = ({ setActiveForm, setUser, setShowUserModal }) => {
+const SuccessMessage = styled(ErrorMessage)`
+  color: lightgreen;
+  margin-bottom: 30px;
+  display: block;
+  text-align: center;
+  font-style: normal;
+  max-width: 60%;
+  margin: 0 auto 30px;
+`;
+
+const LoginForm = ({
+  setActiveForm,
+  setUser,
+  setShowUserModal,
+  successMessage,
+}) => {
   const [username, setUsername] = useState("supergreg");
   const [password, setPassword] = useState("password");
   const [readyForSubmit, setReadyForSubmit] = useState(false);
@@ -92,7 +108,9 @@ const LoginForm = ({ setActiveForm, setUser, setShowUserModal }) => {
 
     try {
       const user = await loginService.login({ username, password });
+      window.localStorage.setItem("loggedCofiUser", JSON.stringify(user));
       setUser(user);
+      userService.setToken(user.token);
     } catch (e) {
       setErrorMessage(e.response.data.error);
       setReadyForSubmit(false);
@@ -111,6 +129,9 @@ const LoginForm = ({ setActiveForm, setUser, setShowUserModal }) => {
 
   return (
     <Root onClick={(e) => e.stopPropagation()}>
+      {successMessage ? (
+        <SuccessMessage>{successMessage}</SuccessMessage>
+      ) : null}
       <Form autoComplete="off">
         <input type={"hidden"} value={"prayer"} />
         {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}

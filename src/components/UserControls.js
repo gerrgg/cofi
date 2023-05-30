@@ -16,13 +16,17 @@ const Row = styled.div`
   align-items: center;
 `;
 
-const UserControls = ({ handleUserIconClick, user }) => {
+const UserControls = ({ handleUserIconClick, user, setUser }) => {
   return (
     <Root>
       <Row>
-        <div onClick={handleUserIconClick}>
-          <UserIcon />
-        </div>
+        {!user ? (
+          <div onClick={handleUserIconClick}>
+            <UserIcon />
+          </div>
+        ) : (
+          <div onClick={handleUserIconClick}>{user.username}</div>
+        )}
       </Row>
     </Root>
   );

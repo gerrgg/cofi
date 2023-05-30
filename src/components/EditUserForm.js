@@ -56,18 +56,15 @@ const Button = styled.button`
   }
 `;
 
-const TextLink = styled.span`
-  font-size: 12px;
-  text-align: center;
+const LogoutButton = styled(Button)`
+  background: red;
   color: #fff;
-  margin: 0;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  max-width: 210px;
-  margin: 0 auto;
+  border: 1px solid #fff;
 
-  &:hover {
-    color: lightgreen;
+  &:hover:not(&:disabled) {
+    color: red;
+    background: transparent;
+    border: 1px solid red;
   }
 `;
 
@@ -77,48 +74,39 @@ const ErrorMessage = styled.span`
   font-style: italic;
 `;
 
-const RegisterForm = ({ setActiveForm, setSuccessMessage }) => {
-  const [username, setUsername] = useState("test");
-  const [email, setEmail] = useState("test@test.com");
-  const [password, setPassword] = useState("password");
-  const [confirmPassword, setConfirmPassword] = useState("password");
-  const [readyForSubmit, setReadyForSubmit] = useState(false);
+const Heading = styled.h2`
+  margin-bottom: 50px;
+  text-align: center;
+  font-size: 18px;
+`;
+
+const EditUserForm = ({ user, setShowUserModal, setUser }) => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+
   const [errorMessage, setErrorMessage] = useState(false);
 
-  const validateUsername = (value) =>
-    value.length >= 4 && !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value);
-
-  const validateEmail = (value) =>
-    value.length && /^[^@]+@[^@]+\.[^@]+$/.test(value);
-
-  const validatePassword = (value) => value.length >= 8;
-
-  const validateConfirmPassword = (value) =>
-    validatePassword(value) && password === confirmPassword;
-
-  useEffect(() => {
-    if (
-      validateUsername(username) &&
-      validateEmail(email) &&
-      validatePassword(password) &&
-      validateConfirmPassword(confirmPassword)
-    ) {
-      setReadyForSubmit(true);
-    }
-  }, [username, email, password, confirmPassword]);
+  const handleLogout = () => {
+    setUser(null);
+    window.localStorage.clear();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const user = await userService.create({ username, email, password });
-      setSuccessMessage("Registration successful, you can now login.");
-      setActiveForm("login");
-    } catch (e) {
-      console.log(e);
+    // get user id from token
 
+    try {
+      const updatedUser = await userService.update({
+        username,
+        password,
+        email,
+        name,
+      });
+    } catch (e) {
       setErrorMessage(e.response.data.error);
-      setReadyForSubmit(false);
 
       setTimeout(() => {
         setErrorMessage(null);
@@ -126,8 +114,17 @@ const RegisterForm = ({ setActiveForm, setSuccessMessage }) => {
     }
   };
 
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username);
+      setEmail(user.email);
+      setName(user.name ? user.name : "");
+    }
+  }, [user]);
+
   return (
     <Root onClick={(e) => e.stopPropagation()}>
+      <Heading>Edit User</Heading>
       <Form autoComplete="off">
         <input type={"hidden"} value={"prayer"} />
         {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
@@ -135,47 +132,38 @@ const RegisterForm = ({ setActiveForm, setSuccessMessage }) => {
           <Input
             type="text"
             label={"Username"}
-            validation={validateUsername}
             value={username}
             setValue={setUsername}
           />
         </FormGroup>
+
+        <FormGroup>
+          <Input type="test" label={"Name"} value={name} setValue={setName} />
+        </FormGroup>
+
         <FormGroup>
           <Input
             type="email"
             label={"Email"}
-            validation={validateEmail}
             value={email}
             setValue={setEmail}
           />
         </FormGroup>
+
         <FormGroup>
           <Input
             type="password"
-            label={"Password"}
-            validation={validatePassword}
+            label={"New Password"}
             value={password}
             setValue={setPassword}
           />
         </FormGroup>
-        <FormGroup>
-          <Input
-            type="password"
-            label={"Confirm Password"}
-            validation={validateConfirmPassword}
-            value={confirmPassword}
-            setValue={setConfirmPassword}
-          />
-        </FormGroup>
-        <Button onClick={handleSubmit} disabled={readyForSubmit ? "" : true}>
-          Register
-        </Button>
-        <TextLink onClick={() => setActiveForm("login")}>
-          Or Click to Login
-        </TextLink>
+
+        <Button onClick={handleSubmit}>Update</Button>
+        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       </Form>
     </Root>
   );
 };
 
-export default RegisterForm;
+export default EditUserForm;

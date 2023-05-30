@@ -63,6 +63,14 @@ const App = () => {
       .then((response) => setVideos(response.data.videos));
   }, []);
 
+  useEffect(() => {
+    const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
+    if (loggedCofiUser) {
+      const user = JSON.parse(loggedCofiUser);
+      setUser(user);
+    }
+  }, []);
+
   const handleUserIconClick = () => {
     setShowUserModal(!showUserModal);
   };
