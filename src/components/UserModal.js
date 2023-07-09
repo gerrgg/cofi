@@ -30,7 +30,7 @@ const SuccessMessage = styled.span`
 
 const UserModal = ({ setShowUserModal, showUserModal, setUser, user }) => {
   const [activeForm, setActiveForm] = useState("login");
-  const [successMessage, setSuccessMessage] = useState("test");
+  const [successMessage, setSuccessMessage] = useState();
   return (
     <Root
       onClick={() => {
@@ -57,6 +57,8 @@ const UserModal = ({ setShowUserModal, showUserModal, setUser, user }) => {
           user={user}
           setUser={setUser}
           setShowUserModal={setShowUserModal}
+          setSuccessMessage={setSuccessMessage}
+          successMessage={successMessage}
         />
       )}
     </Root>

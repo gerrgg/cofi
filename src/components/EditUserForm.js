@@ -68,10 +68,22 @@ const LogoutButton = styled(Button)`
   }
 `;
 
+
+
 const ErrorMessage = styled.span`
   color: red;
   font-size: 12px;
   font-style: italic;
+`;
+
+const SuccessMessage = styled(ErrorMessage)`
+  color: lightgreen;
+  margin-bottom: 30px;
+  display: block;
+  text-align: center;
+  font-style: normal;
+  max-width: 60%;
+  margin: 0 auto 30px;
 `;
 
 const Heading = styled.h2`
@@ -80,7 +92,7 @@ const Heading = styled.h2`
   font-size: 18px;
 `;
 
-const EditUserForm = ({ user, setShowUserModal, setUser }) => {
+const EditUserForm = ({ user, setShowUserModal, setSuccessMessage, setUser }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -96,22 +108,25 @@ const EditUserForm = ({ user, setShowUserModal, setUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // get user id from token
 
     try {
-      const updatedUser = await userService.update({
+      await userService.update(user.id, {
         username,
         password,
         email,
         name,
       });
+
+      setSuccessMessage(`Update succesful, please login to confirm!`)
+      handleLogout();
     } catch (e) {
       setErrorMessage(e.response.data.error);
-
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
     }
+
+    setTimeout(() => {
+      setSuccessMessage(null);
+      setErrorMessage(null);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -125,6 +140,7 @@ const EditUserForm = ({ user, setShowUserModal, setUser }) => {
   return (
     <Root onClick={(e) => e.stopPropagation()}>
       <Heading>Edit User</Heading>
+      
       <Form autoComplete="off">
         <input type={"hidden"} value={"prayer"} />
         {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
@@ -138,7 +154,7 @@ const EditUserForm = ({ user, setShowUserModal, setUser }) => {
         </FormGroup>
 
         <FormGroup>
-          <Input type="test" label={"Name"} value={name} setValue={setName} />
+          <Input type="text" label={"Name"} value={name} setValue={setName} />
         </FormGroup>
 
         <FormGroup>
