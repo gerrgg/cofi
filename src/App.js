@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import useSound from "use-sound";
+import useEventListener from "./hooks/useEventListener";
 import axios from "axios";
 
 import YouTube from "react-youtube";
@@ -42,6 +43,7 @@ const App = () => {
   const [play, setPlay] = useState(false);
   const [init, setInit] = useState(false);
   const [ready, setReady] = useState(false);
+  const [lowPowerMode, setLowPowerMode] = useState(false);
   const [activeGifIndex, setActiveGifIndex] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [videoStatus, setVideoStatus] = useState(-1);
@@ -75,11 +77,12 @@ const App = () => {
     setShowUserModal(!showUserModal);
   };
 
-  const handleShowPlaylist = () => {
+  const handleShowPlaylist = (e) => {
     setShowPlaylist(!showPlaylist);
   };
 
   const handleShuffleGif = () => {
+    playBoop();
     const random = Math.floor(Math.random() * gifs.length);
     random !== activeGifIndex ? setActiveGifIndex(random) : handleShuffleGif();
   };
@@ -120,10 +123,25 @@ const App = () => {
     volume: 0.25,
   });
 
+  const [playVolume] = useSound("/sounds/volume.wav", {
+    volume: 0.5,
+  });
+
   const handleSetVolume = (level) => {
+    let volume = 0;
+
+    if (level < 1) {
+      volume = 1;
+    } else if (level > 10) {
+      volume = 10;
+    } else {
+      volume = level;
+    }
+
     try {
-      setVolumeLevel(level);
-      videoElement.target.setVolume(level * 10);
+      setVolumeLevel(volume);
+      playVolume();
+      videoElement.target.setVolume(volume * 10);
     } catch (e) {
       console.log(e);
     }
@@ -170,12 +188,48 @@ const App = () => {
     setVideoTitle(event.target.videoTitle);
   };
 
-  const handleKeyDown = (e) => {
-    console.log(e);
-  };
+  function handler({ key, target }) {
+    if (target !== document.body) return;
+
+    if (!init) {
+      setInit(true);
+      togglePause();
+    } else {
+      switch (key) {
+        case " ":
+          togglePause();
+          break;
+        case "p":
+          handleShowPlaylist();
+          break;
+        case "ArrowRight":
+          handleNextVideo();
+          break;
+        case "ArrowDown":
+          handleSetVolume(volumeLevel - 1);
+          break;
+        case "ArrowUp":
+          handleSetVolume(volumeLevel + 1);
+          break;
+        case "s":
+          handleShuffleGif();
+          break;
+        case "m":
+          handleSetVolume(0);
+          break;
+        case "l":
+          setLowPowerMode(!lowPowerMode);
+          break;
+        default:
+          console.log("unsupported " + key);
+      }
+    }
+  }
+
+  useEventListener("keydown", handler);
 
   return (
-    <Root onKeyDown={handleKeyDown}>
+    <Root>
       {videos ? (
         <Playlist
           videos={videos}
@@ -183,6 +237,8 @@ const App = () => {
           handleShowPlaylist={handleShowPlaylist}
           activeVideo={videos[currentVideoIndex].key}
           handleSetVideo={handleSetVideo}
+          activePlaylist={activePlaylist}
+          user={user}
         />
       ) : null}
       <PlayTrigger
@@ -203,7 +259,7 @@ const App = () => {
         ) : null}
       </VideoWrapper>
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
-      <Lines />
+      {lowPowerMode ? null : <Lines />}
       <Static ready={ready} />
       <UserControls
         handleUserIconClick={handleUserIconClick}

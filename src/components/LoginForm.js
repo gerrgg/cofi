@@ -93,7 +93,7 @@ const LoginForm = ({
   successMessage,
 }) => {
   const [username, setUsername] = useState("supergreg");
-  const [password, setPassword] = useState("password");
+  const [password, setPassword] = useState("gabe");
   const [readyForSubmit, setReadyForSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
 
@@ -111,6 +111,7 @@ const LoginForm = ({
       window.localStorage.setItem("loggedCofiUser", JSON.stringify(user));
       setUser(user);
       userService.setToken(user.token);
+      console.log(user.token)
     } catch (e) {
       setErrorMessage(e.response.data.error);
       setReadyForSubmit(false);

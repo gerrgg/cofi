@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import useSound from "use-sound";
 import UserIcon from "./UserIcon";
 
 const Root = styled.div`

@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import PlaylistVideo from "./PlaylistVideo";
+import { useState } from "react";
+import { PlaylistVideo, NewVideo } from "./PlaylistVideo";
+import NewVideoForm from "./NewVideoForm";
 
 const Root = styled.div`
   width: 100vw;
@@ -32,7 +34,16 @@ const Playlist = ({
   handleShowPlaylist,
   activeVideo,
   handleSetVideo,
+  activePlaylist,
+  user,
 }) => {
+  const [showForm, setShowForm] = useState(false);
+
+  const handleNewVideo = (e) => {
+    e.stopPropagation();
+    setShowForm(!showForm);
+  };
+
   return (
     <Root onClick={handleShowPlaylist} showPlaylist={showPlaylist}>
       <PlaylistWrapper>
@@ -44,6 +55,10 @@ const Playlist = ({
             active={activeVideo === video.key}
           />
         ))}
+        <NewVideo />
+        {showForm ? (
+          <NewVideoForm activePlaylist={activePlaylist} user={user} />
+        ) : null}
       </PlaylistWrapper>
     </Root>
   );

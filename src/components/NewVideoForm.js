@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 import Input from "./Input";
-import { useEffect } from "react";
-import userService from "../services/user";
+import axios from "axios";
+import videoService from "../services/video";
 
 const Root = styled.div`
   width: 600px;
@@ -56,20 +56,6 @@ const Button = styled.button`
   }
 `;
 
-const LogoutButton = styled(Button)`
-  background: red;
-  color: #fff;
-  border: 1px solid #fff;
-
-  &:hover:not(&:disabled) {
-    color: red;
-    background: transparent;
-    border: 1px solid red;
-  }
-`;
-
-
-
 const ErrorMessage = styled.span`
   color: red;
   font-size: 12px;
@@ -92,37 +78,41 @@ const Heading = styled.h2`
   font-size: 18px;
 `;
 
-const EditUserForm = ({ user, setShowUserModal, setSuccessMessage, setUser }) => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-
+const NewVideoForm = ({ activePlaylist, user }) => {
+  const [video, setVideo] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
 
-  const handleLogout = () => {
-    setUser(null);
-    window.localStorage.clear();
-  };
+  function youtube_parser(url) {
+    var regExp =
+      /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    var match = url.match(regExp);
+    return match && match[7].length == 11 ? match[7] : false;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const key = youtube_parser(video);
 
     try {
-      userService.setToken(user.token);
+      const { data } = await axios.get(
+        `http://www.youtube.com/oembed?url=${video}&format=json`
+      );
 
-      await userService.update(user.token, {
-        username,
-        password,
-        email,
-        name,
-      });
+      const newVideo = {
+        key,
+        title: data.title,
+        thumbnail: data.thumbnail_url,
+        playlist: activePlaylist,
+      };
 
-      setSuccessMessage(`Update succesful, please login to confirm!`);
-      // handleLogout();
+      await videoService.create(newVideo);
+
+      setSuccessMessage(`Video Added`);
+      return true;
     } catch (e) {
-      setErrorMessage(e.response.data.error);
+      setErrorMessage("Something went wrong");
     }
 
     setTimeout(() => {
@@ -131,57 +121,24 @@ const EditUserForm = ({ user, setShowUserModal, setSuccessMessage, setUser }) =>
     }, 3000);
   };
 
-  useEffect(() => {
-    if (user) {
-      setUsername(user.username);
-      setEmail(user.email);
-      setName(user.name ? user.name : "");
-    }
-  }, [user]);
-
   return (
     <Root onClick={(e) => e.stopPropagation()}>
-      <Heading>Edit User</Heading>
-      
+      <Heading>Add Youtube Video</Heading>
+
       <Form autoComplete="off">
-        <input type={"hidden"} value={"prayer"} />
         {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
         <FormGroup>
           <Input
             type="text"
-            label={"Username"}
-            value={username}
-            setValue={setUsername}
+            label={"Video URL"}
+            value={video}
+            setValue={setVideo}
           />
         </FormGroup>
-
-        <FormGroup>
-          <Input type="text" label={"Name"} value={name} setValue={setName} />
-        </FormGroup>
-
-        <FormGroup>
-          <Input
-            type="email"
-            label={"Email"}
-            value={email}
-            setValue={setEmail}
-          />
-        </FormGroup>
-
-        <FormGroup>
-          <Input
-            type="password"
-            label={"New Password"}
-            value={password}
-            setValue={setPassword}
-          />
-        </FormGroup>
-
-        <Button onClick={handleSubmit}>Update</Button>
-        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+        <Button onClick={handleSubmit}>Add Video</Button>
       </Form>
     </Root>
   );
 };
 
-export default EditUserForm;
+export default NewVideoForm;
