@@ -78,7 +78,7 @@ const Heading = styled.h2`
   font-size: 18px;
 `;
 
-const NewVideoForm = ({ activePlaylist, user }) => {
+const NewVideoForm = ({ activePlaylist, setVideos, videos, setShowForm }) => {
   const [video, setVideo] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -107,10 +107,13 @@ const NewVideoForm = ({ activePlaylist, user }) => {
         playlist: activePlaylist,
       };
 
-      await videoService.create(newVideo);
+      const response = await videoService.create(newVideo);
+
+      setVideos(videos.concat(response));
+      setVideo("");
+      setShowForm(false);
 
       setSuccessMessage(`Video Added`);
-      return true;
     } catch (e) {
       setErrorMessage("Something went wrong");
     }
@@ -127,6 +130,9 @@ const NewVideoForm = ({ activePlaylist, user }) => {
 
       <Form autoComplete="off">
         {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
+        {successMessage ? (
+          <SuccessMessage>{successMessage}</SuccessMessage>
+        ) : null}
         <FormGroup>
           <Input
             type="text"

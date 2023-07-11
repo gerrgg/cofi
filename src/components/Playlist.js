@@ -15,7 +15,7 @@ const Root = styled.div`
   background: rgba(0, 0, 0, 0.5);
   overflow: hidden;
   color: #fff;
-  padding: 1rem;
+  padding: 4rem 1rem 1rem;
   transition: opacity 0.3s ease;
   pointer-events: ${(props) => (props.showPlaylist ? "all" : "none")};
 `;
@@ -35,7 +35,7 @@ const Playlist = ({
   activeVideo,
   handleSetVideo,
   activePlaylist,
-  user,
+  setVideos,
 }) => {
   const [showForm, setShowForm] = useState(false);
 
@@ -53,11 +53,18 @@ const Playlist = ({
             video={video}
             handleSetVideo={handleSetVideo}
             active={activeVideo === video.key}
+            setVideos={setVideos}
+            videos={videos}
           />
         ))}
-        <NewVideo />
+        <NewVideo handleNewVideo={handleNewVideo} />
         {showForm ? (
-          <NewVideoForm activePlaylist={activePlaylist} user={user} />
+          <NewVideoForm
+            activePlaylist={activePlaylist}
+            setVideos={setVideos}
+            videos={videos}
+            setShowForm={setShowForm}
+          />
         ) : null}
       </PlaylistWrapper>
     </Root>

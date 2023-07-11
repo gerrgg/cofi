@@ -238,7 +238,7 @@ const App = () => {
           activeVideo={videos[currentVideoIndex].key}
           handleSetVideo={handleSetVideo}
           activePlaylist={activePlaylist}
-          user={user}
+          setVideos={setVideos}
         />
       ) : null}
       <PlayTrigger

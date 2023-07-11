@@ -68,22 +68,10 @@ const LogoutButton = styled(Button)`
   }
 `;
 
-
-
 const ErrorMessage = styled.span`
   color: red;
   font-size: 12px;
   font-style: italic;
-`;
-
-const SuccessMessage = styled(ErrorMessage)`
-  color: lightgreen;
-  margin-bottom: 30px;
-  display: block;
-  text-align: center;
-  font-style: normal;
-  max-width: 60%;
-  margin: 0 auto 30px;
 `;
 
 const Heading = styled.h2`
@@ -92,7 +80,12 @@ const Heading = styled.h2`
   font-size: 18px;
 `;
 
-const EditUserForm = ({ user, setShowUserModal, setSuccessMessage, setUser }) => {
+const EditUserForm = ({
+  user,
+  setShowUserModal,
+  setSuccessMessage,
+  setUser,
+}) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -107,7 +100,6 @@ const EditUserForm = ({ user, setShowUserModal, setSuccessMessage, setUser }) =>
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
 
     try {
       userService.setToken(user.token);
@@ -142,7 +134,7 @@ const EditUserForm = ({ user, setShowUserModal, setSuccessMessage, setUser }) =>
   return (
     <Root onClick={(e) => e.stopPropagation()}>
       <Heading>Edit User</Heading>
-      
+
       <Form autoComplete="off">
         <input type={"hidden"} value={"prayer"} />
         {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
