@@ -7,7 +7,7 @@ import VideoService from "../services/video";
 
 const Title = styled.h2`
   font-size: 10px;
-  padding: 15px;
+  padding: 1.5rem 1rem;
   width: 100%;
   color: ${(props) => (props.active ? "lightgreen" : "#fff")};
 `;
@@ -31,7 +31,7 @@ const Remove = styled(XMarkIcon)`
 
 const Root = styled.div`
   position: relative;
-
+  background: #000;
   width: calc(20% - 15px);
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -55,6 +55,7 @@ const NewVideoWrapper = styled(Root)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-height: 200px;
 
   &:hover svg {
     color: lightgreen;
@@ -63,6 +64,15 @@ const NewVideoWrapper = styled(Root)`
 
 const IconWrapper = styled(PlusIcon)`
   color: green;
+`;
+
+const ImageWrapper = styled.div`
+  overflow: hidden;
+  position: relative;
+
+  img {
+    transform: scale(1.32);
+  }
 `;
 
 const PlaylistVideo = ({
@@ -85,11 +95,11 @@ const PlaylistVideo = ({
 
   return (
     <Root active={active} onClick={() => handleSetVideo(video.key)}>
-      <img
-        src={`https://i.ytimg.com/vi/${video.key}/maxresdefault.jpg`}
-        alt={video.key}
-      />
+      <ImageWrapper>
+        <img src={video.thumbnail} alt={video.key} />
+      </ImageWrapper>
       <Title active={active}>{video.title}</Title>
+
       <div onClick={handleRemove}>
         <Remove />
       </div>

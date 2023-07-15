@@ -15,6 +15,7 @@ import Static from "./components/Static";
 import Playlist from "./components/Playlist";
 import UserControls from "./components/UserControls";
 import UserModal from "./components/UserModal";
+import PlaylistSelector from "./components/PlaylistSelector";
 
 let videoElement = null;
 
@@ -53,25 +54,47 @@ const App = () => {
   const [videos, setVideos] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
   const [user, setUser] = useState(null);
+  const [playlists, setPlaylists] = useState([]);
 
   // use default playlist by default
-  const [activePlaylist, setActivePlaylist] = useState(
-    "647292a106b18a4d7c802c7e"
-  );
+  const [activePlaylist, setActivePlaylist] = useState(null);
+
+  const getVideosFromPlaylist = async () => {
+    const response = await axios.get(
+      `http://localhost:3001/api/playlists/${activePlaylist}`
+    );
+
+    setVideos(response.data.videos);
+  };
+
+  const getAllVideos = async () => {
+    const response = await axios.get(`http://localhost:3001/api/videos/`);
+    setVideos(response.data);
+  };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/api/playlists/${activePlaylist}`)
-      .then((response) => setVideos(response.data.videos));
-  }, []);
+    try {
+      const data = activePlaylist ? getVideosFromPlaylist() : getAllVideos();
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [setActivePlaylist, activePlaylist]);
 
   useEffect(() => {
     const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
     if (loggedCofiUser) {
       const user = JSON.parse(loggedCofiUser);
       setUser(user);
+      setPlaylists(user.playlists);
     }
   }, []);
+
+  useEffect(() => {
+    if (user && user.playlists) {
+      setPlaylists(user.playlists);
+    }
+  }, [setUser, user]);
 
   const handleUserIconClick = () => {
     setShowUserModal(!showUserModal);
@@ -230,7 +253,7 @@ const App = () => {
 
   return (
     <Root>
-      {videos ? (
+      {videos && videos[currentVideoIndex] ? (
         <Playlist
           videos={videos}
           showPlaylist={showPlaylist}
@@ -247,7 +270,7 @@ const App = () => {
         togglePause={togglePause}
       />
       <VideoWrapper>
-        {videos ? (
+        {videos && videos[currentVideoIndex] ? (
           <YouTube
             style={{ zIndex: 1, position: "relative" }}
             videoId={videos[currentVideoIndex].key}
@@ -261,6 +284,13 @@ const App = () => {
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
       {lowPowerMode ? null : <Lines />}
       <Static ready={ready} />
+      <PlaylistSelector
+        user={user}
+        playlists={playlists}
+        setPlaylists={setPlaylists}
+        activePlaylist={activePlaylist}
+        setActivePlaylist={setActivePlaylist}
+      />
       <UserControls
         handleUserIconClick={handleUserIconClick}
         showUserModal={showUserModal}

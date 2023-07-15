@@ -15,6 +15,17 @@ const Row = styled.div`
   align-items: center;
 `;
 
+const Trigger = styled.div`
+  cursor: pointer;
+  &:hover {
+    color: lightgreen;
+
+    svg {
+      color: lightgreen;
+    }
+  }
+`;
+
 const UserControls = ({ handleUserIconClick, user, setUser }) => {
   return (
     <Root>
@@ -24,7 +35,7 @@ const UserControls = ({ handleUserIconClick, user, setUser }) => {
             <UserIcon />
           </div>
         ) : (
-          <div onClick={handleUserIconClick}>{user.username}</div>
+          <Trigger onClick={handleUserIconClick}>{user.username}</Trigger>
         )}
       </Row>
     </Root>

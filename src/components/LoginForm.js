@@ -111,7 +111,6 @@ const LoginForm = ({
       window.localStorage.setItem("loggedCofiUser", JSON.stringify(user));
       setUser(user);
       userService.setToken(user.token);
-      console.log(user.token);
     } catch (e) {
       setErrorMessage(e.response.data.error);
       setReadyForSubmit(false);
