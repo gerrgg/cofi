@@ -86,9 +86,9 @@ const EditUserForm = ({
   setSuccessMessage,
   setUser,
 }) => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState(user.username);
+  const [email, setEmail] = useState(user.email);
+  const [name, setName] = useState(user.name);
   const [password, setPassword] = useState("");
 
   const [errorMessage, setErrorMessage] = useState(false);
@@ -104,12 +104,21 @@ const EditUserForm = ({
     try {
       userService.setToken(user.token);
 
-      await userService.update(user.token, {
+      const updatedUser = await userService.update({
         username,
         password,
         email,
         name,
       });
+
+      updatedUser.token = user.token;
+
+      setUser(updatedUser);
+
+      window.localStorage.setItem(
+        "loggedCofiUser",
+        JSON.stringify(updatedUser)
+      );
 
       setSuccessMessage(`Update succesful, please login to confirm!`);
       // handleLogout();
@@ -123,13 +132,13 @@ const EditUserForm = ({
     }, 3000);
   };
 
-  useEffect(() => {
-    if (user) {
-      setUsername(user.username);
-      setEmail(user.email);
-      setName(user.name ? user.name : "");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setUsername(user.username);
+  //     setEmail(user.email);
+  //     setName(user.name ? user.name : "");
+  //   }
+  // }, [user]);
 
   return (
     <Root onClick={(e) => e.stopPropagation()}>

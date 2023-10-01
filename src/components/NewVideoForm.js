@@ -8,14 +8,14 @@ const Root = styled.div`
   width: 600px;
   height: auto;
   padding: 3rem 2rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.9);
   border: 1px solid lightgreen;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 15px;
-  z-index: 1;
+  z-index: 10;
   cursor: auto;
 `;
 
@@ -78,7 +78,7 @@ const Heading = styled.h2`
   font-size: 18px;
 `;
 
-const NewVideoForm = ({ activePlaylist, setVideos, videos, setShowForm }) => {
+const NewVideoForm = ({ setVideos, videos, setShowForm }) => {
   const [video, setVideo] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -104,7 +104,6 @@ const NewVideoForm = ({ activePlaylist, setVideos, videos, setShowForm }) => {
         key,
         title: data.title,
         thumbnail: data.thumbnail_url,
-        playlist: activePlaylist,
       };
 
       const response = await videoService.create(newVideo);

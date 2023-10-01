@@ -15,7 +15,6 @@ import Static from "./components/Static";
 import Playlist from "./components/Playlist";
 import UserControls from "./components/UserControls";
 import UserModal from "./components/UserModal";
-import PlaylistSelector from "./components/PlaylistSelector";
 
 let videoElement = null;
 
@@ -54,47 +53,34 @@ const App = () => {
   const [videos, setVideos] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
   const [user, setUser] = useState(null);
-  const [playlists, setPlaylists] = useState([]);
 
   // use default playlist by default
-  const [activePlaylist, setActivePlaylist] = useState(null);
-
-  const getVideosFromPlaylist = async () => {
-    const response = await axios.get(
-      `http://localhost:3001/api/playlists/${activePlaylist}`
-    );
-
-    setVideos(response.data.videos);
+  const getAllVideos = async () => {
+    const response = await axios.get(`http://localhost:3001/api/videos`);
+    setVideos(response.data);
   };
 
-  const getAllVideos = async () => {
-    const response = await axios.get(`http://localhost:3001/api/videos/`);
-    setVideos(response.data);
+  const getUser = async (id) => {
+    const response = await axios.get(`http://localhost:3001/api/users/${id}`);
+    // setUser(response.data);
   };
 
   useEffect(() => {
     try {
-      const data = activePlaylist ? getVideosFromPlaylist() : getAllVideos();
-      console.log(data);
+      getAllVideos();
     } catch (e) {
       console.log(e);
-    }
-  }, [setActivePlaylist, activePlaylist]);
-
-  useEffect(() => {
-    const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
-    if (loggedCofiUser) {
-      const user = JSON.parse(loggedCofiUser);
-      setUser(user);
-      setPlaylists(user.playlists);
     }
   }, []);
 
   useEffect(() => {
-    if (user && user.playlists) {
-      setPlaylists(user.playlists);
+    const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
+
+    if (loggedCofiUser) {
+      const user = JSON.parse(loggedCofiUser);
+      setUser(user);
     }
-  }, [setUser, user]);
+  }, []);
 
   const handleUserIconClick = () => {
     setShowUserModal(!showUserModal);
@@ -165,9 +151,7 @@ const App = () => {
       setVolumeLevel(volume);
       playVolume();
       videoElement.target.setVolume(volume * 10);
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const togglePause = () => {
@@ -260,8 +244,8 @@ const App = () => {
           handleShowPlaylist={handleShowPlaylist}
           activeVideo={videos[currentVideoIndex].key}
           handleSetVideo={handleSetVideo}
-          activePlaylist={activePlaylist}
           setVideos={setVideos}
+          user={user}
         />
       ) : null}
       <PlayTrigger
@@ -284,13 +268,7 @@ const App = () => {
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
       {lowPowerMode ? null : <Lines />}
       <Static ready={ready} />
-      <PlaylistSelector
-        user={user}
-        playlists={playlists}
-        setPlaylists={setPlaylists}
-        activePlaylist={activePlaylist}
-        setActivePlaylist={setActivePlaylist}
-      />
+
       <UserControls
         handleUserIconClick={handleUserIconClick}
         showUserModal={showUserModal}

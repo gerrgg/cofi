@@ -56,7 +56,7 @@ const IconWrapper = styled.div`
 `;
 
 const NewPlaylist = ({ user, setPlaylists, playlists }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState();
 
   return (
     <Root>

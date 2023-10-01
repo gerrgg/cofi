@@ -15,7 +15,7 @@ const Root = styled.div`
   background: rgba(0, 0, 0, 0.5);
   overflow: hidden;
   color: #fff;
-  padding: 4rem 1rem 1rem;
+  padding: 4.5rem 1rem 1rem;
   transition: opacity 0.3s ease;
   pointer-events: ${(props) => (props.showPlaylist ? "all" : "none")};
 `;
@@ -29,6 +29,7 @@ const PlaylistWrapper = styled.div`
 `;
 
 const Playlist = ({
+  user,
   videos,
   showPlaylist,
   handleShowPlaylist,
@@ -43,6 +44,8 @@ const Playlist = ({
     e.stopPropagation();
     setShowForm(!showForm);
   };
+
+  if (!activePlaylist) return;
 
   return (
     <Root onClick={handleShowPlaylist} showPlaylist={showPlaylist}>
@@ -60,7 +63,7 @@ const Playlist = ({
         <NewVideo handleNewVideo={handleNewVideo} />
         {showForm ? (
           <NewVideoForm
-            activePlaylist={activePlaylist}
+            user={user}
             setVideos={setVideos}
             videos={videos}
             setShowForm={setShowForm}
