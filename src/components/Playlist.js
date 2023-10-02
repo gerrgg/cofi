@@ -45,8 +45,6 @@ const Playlist = ({
     setShowForm(!showForm);
   };
 
-  if (!activePlaylist) return;
-
   return (
     <Root onClick={handleShowPlaylist} showPlaylist={showPlaylist}>
       <PlaylistWrapper>

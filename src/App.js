@@ -50,7 +50,7 @@ const App = () => {
   const [volumeLevel, setVolumeLevel] = useState(10);
   const [videoTitle, setVideoTitle] = useState(null);
   const [showPlaylist, setShowPlaylist] = useState(false);
-  const [videos, setVideos] = useState(null);
+  const [videos, setVideos] = useState([]);
   const [showUserModal, setShowUserModal] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -60,18 +60,24 @@ const App = () => {
     setVideos(response.data);
   };
 
-  const getUser = async (id) => {
-    const response = await axios.get(`http://localhost:3001/api/users/${id}`);
-    // setUser(response.data);
+  const getUserVideos = async () => {
+    const response = await axios.get(
+      `http://localhost:3001/api/users/${user.username}/videos`
+    );
+    setVideos(response.data);
   };
 
   useEffect(() => {
     try {
-      getAllVideos();
+      if (user && user.username) {
+        // getUserVideos();
+      } else {
+        getAllVideos();
+      }
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [user, setUser]);
 
   useEffect(() => {
     const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
@@ -100,6 +106,7 @@ const App = () => {
     setActiveGifIndex(
       activeGifIndex + 1 >= gifs.length ? 0 : activeGifIndex + 1
     );
+
     setCurrentVideoIndex(
       currentVideoIndex + 1 >= videos.length ? 0 : currentVideoIndex + 1
     );
@@ -158,6 +165,7 @@ const App = () => {
     if (!init) {
       setInit(true);
     }
+
     setPlay(!play);
     playBoop();
   };
@@ -170,7 +178,7 @@ const App = () => {
 
   // buggy
   useEffect(() => {
-    if (videos && videoElement) {
+    if (videos && videos.length && videoElement) {
       try {
         play
           ? videoElement.target.playVideo()
@@ -180,7 +188,7 @@ const App = () => {
         console.log(e, videoElement);
       }
     }
-  }, [play, videoStatus, videos]);
+  }, [play, videoStatus, videos, setVideos]);
 
   const _onReady = (event) => {
     if (event.target) {

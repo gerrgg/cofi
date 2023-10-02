@@ -13,7 +13,8 @@ const getAll = () => {
 };
 
 const create = async (newObject) => {
-  const response = await axios.post(baseUrl, newObject);
+  const config = { headers: { Authorization: token } };
+  const response = await axios.post(baseUrl, newObject, config);
   return response.data;
 };
 
@@ -30,4 +31,4 @@ const remove = (id) => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, update, remove };
+export default { getAll, create, update, remove, setToken };

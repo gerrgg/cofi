@@ -78,7 +78,7 @@ const Input = ({ label, type, validation, value, setValue }) => {
         onBlur={handleValidate}
         valid={valid}
       />
-      <Label hasValue={value.length > 0}>{label}</Label>
+      <Label hasValue={value && value.length > 0}>{label}</Label>
       <ValidationWrapper showValidiation={showValidiation}>
         {valid ? <CheckMarkIcon /> : <XMarkIcon />}
       </ValidationWrapper>

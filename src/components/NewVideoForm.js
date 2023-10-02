@@ -78,7 +78,7 @@ const Heading = styled.h2`
   font-size: 18px;
 `;
 
-const NewVideoForm = ({ setVideos, videos, setShowForm }) => {
+const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
   const [video, setVideo] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -96,6 +96,8 @@ const NewVideoForm = ({ setVideos, videos, setShowForm }) => {
     const key = youtube_parser(video);
 
     try {
+      videoService.setToken(user.token);
+
       const { data } = await axios.get(
         `http://www.youtube.com/oembed?url=${video}&format=json`
       );
