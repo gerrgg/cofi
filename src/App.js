@@ -15,6 +15,8 @@ import Static from "./components/Static";
 import Playlist from "./components/Playlist";
 import UserControls from "./components/UserControls";
 import UserModal from "./components/UserModal";
+import Shortcuts from "./components/Shortcuts";
+import KeyboardIcon from "./components/KeyboardIcon";
 
 let videoElement = null;
 
@@ -39,6 +41,13 @@ const VideoWrapper = styled.div`
   overflow hidden;
 `;
 
+const TopLeft = styled.div`
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 2;
+`;
+
 const App = () => {
   const [play, setPlay] = useState(false);
   const [init, setInit] = useState(false);
@@ -53,18 +62,21 @@ const App = () => {
   const [videos, setVideos] = useState([]);
   const [showUserModal, setShowUserModal] = useState(false);
   const [user, setUser] = useState(null);
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   // use default playlist by default
   const getAllVideos = async () => {
-    const response = await axios.get(`http://localhost:3001/api/videos`);
+    const response = await axios.get(`/api/videos`);
     setVideos(response.data);
   };
 
   const getUserVideos = async () => {
-    const response = await axios.get(
-      `http://localhost:3001/api/users/${user.username}/videos`
-    );
+    const response = await axios.get(`/api/users/${user.username}/videos`);
     setVideos(response.data);
+  };
+
+  const handleShowShortcuts = () => {
+    setShowShortcuts(!showShortcuts);
   };
 
   useEffect(() => {
@@ -276,7 +288,11 @@ const App = () => {
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
       {lowPowerMode ? null : <Lines />}
       <Static ready={ready} />
-
+      <TopLeft>
+        <div onClick={handleShowShortcuts}>
+          <KeyboardIcon showShortcuts={showShortcuts} />
+        </div>
+      </TopLeft>
       <UserControls
         handleUserIconClick={handleUserIconClick}
         showUserModal={showUserModal}
@@ -287,6 +303,10 @@ const App = () => {
         showUserModal={showUserModal}
         setUser={setUser}
         user={user}
+      />
+      <Shortcuts
+        handleShowShortcuts={handleShowShortcuts}
+        showShortcuts={showShortcuts}
       />
       {init ? (
         <Controls

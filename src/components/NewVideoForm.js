@@ -99,7 +99,7 @@ const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
       videoService.setToken(user.token);
 
       const { data } = await axios.get(
-        `http://www.youtube.com/oembed?url=${video}&format=json`
+        `https://www.youtube.com/oembed?url=${video}&format=json`
       );
 
       const newVideo = {

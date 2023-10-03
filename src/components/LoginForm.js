@@ -92,8 +92,8 @@ const LoginForm = ({
   setShowUserModal,
   successMessage,
 }) => {
-  const [username, setUsername] = useState("supergreg");
-  const [password, setPassword] = useState("gabe");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [readyForSubmit, setReadyForSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
 

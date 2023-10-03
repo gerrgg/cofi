@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/api/videos";
+const baseUrl = "/api/videos";
 
 let token = null;
 
