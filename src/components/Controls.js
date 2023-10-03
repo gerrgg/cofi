@@ -50,7 +50,28 @@ const Controls = ({
 
   return (
     <Root>
-      <Title onClick={handleShowPlaylist}>{videoTitle}</Title>
+      <Title onClick={handleShowPlaylist}>
+        {videos.length ? (
+          videoTitle
+        ) : (
+          <TypeAnimation
+            sequence={[
+              // Same String at the start will only be typed once, initially
+              "Click here to start adding videos",
+              1000,
+              "Click here to start building your playlist",
+              1000,
+              "Click here to impress your friends and influence people",
+              1000,
+              "Click here to be a legend",
+              1000,
+            ]}
+            speed={25}
+            style={{ fontWeight: "bold" }}
+            repeat={Infinity}
+          />
+        )}
+      </Title>
       <Row>
         <div onClick={togglePause}>
           <PausePlay play={play} />

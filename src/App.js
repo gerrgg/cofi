@@ -63,6 +63,7 @@ const App = () => {
   const [showUserModal, setShowUserModal] = useState(false);
   const [user, setUser] = useState(null);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [activeVideo, setActiveVideo] = useState(false);
 
   // use default playlist by default
   const getAllVideos = async () => {
@@ -82,10 +83,12 @@ const App = () => {
   useEffect(() => {
     try {
       if (user && user.username) {
-        // getUserVideos();
+        getUserVideos();
       } else {
         getAllVideos();
       }
+
+      setActiveVideo(videos[currentVideoIndex].key);
     } catch (e) {
       console.log(e);
     }
@@ -99,6 +102,15 @@ const App = () => {
       setUser(user);
     }
   }, []);
+
+  useEffect(() => {
+    try {
+      console.log(videos);
+      setActiveVideo(videos[currentVideoIndex].key);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [videos, currentVideoIndex]);
 
   const handleUserIconClick = () => {
     setShowUserModal(!showUserModal);
@@ -190,6 +202,7 @@ const App = () => {
 
   // buggy
   useEffect(() => {
+    console.log(videos, videoElement);
     if (videos && videos.length && videoElement) {
       try {
         play
@@ -211,6 +224,7 @@ const App = () => {
   };
 
   const _onStateChange = (event) => {
+    console.log(event);
     setVideoStatus(event.data);
     setVideoTitle(event.target.videoTitle);
   };
@@ -257,27 +271,26 @@ const App = () => {
 
   return (
     <Root>
-      {videos && videos[currentVideoIndex] ? (
-        <Playlist
-          videos={videos}
-          showPlaylist={showPlaylist}
-          handleShowPlaylist={handleShowPlaylist}
-          activeVideo={videos[currentVideoIndex].key}
-          handleSetVideo={handleSetVideo}
-          setVideos={setVideos}
-          user={user}
-        />
-      ) : null}
+      <Playlist
+        videos={videos}
+        showPlaylist={showPlaylist}
+        handleShowPlaylist={handleShowPlaylist}
+        activeVideo={activeVideo}
+        handleSetVideo={handleSetVideo}
+        setVideos={setVideos}
+        user={user}
+      />
       <PlayTrigger
         ready={ready && showPlaylist === false}
         play={play}
         togglePause={togglePause}
       />
       <VideoWrapper>
-        {videos && videos[currentVideoIndex] ? (
+        {console.log(activeVideo)}
+        {videos && activeVideo ? (
           <YouTube
             style={{ zIndex: 1, position: "relative" }}
-            videoId={videos[currentVideoIndex].key}
+            videoId={activeVideo}
             opts={opts}
             onReady={_onReady}
             onStateChange={_onStateChange}
