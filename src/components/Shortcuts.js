@@ -73,7 +73,7 @@ const Label = styled.p`
 const Shortcuts = ({ showShortcuts, handleShowShortcuts }) => {
   return (
     <Root showShortcuts={showShortcuts} onClick={handleShowShortcuts}>
-      <Heading>Controls</Heading>
+      <Heading>Key bindings</Heading>
       <Rows>
         <Row>
           <Image src="/blank-keyboard-key-icon.png" /> -

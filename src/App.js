@@ -18,6 +18,8 @@ import UserModal from "./components/UserModal";
 import Shortcuts from "./components/Shortcuts";
 import KeyboardIcon from "./components/KeyboardIcon";
 import GithubIcon from "./components/GithubIcon";
+import TwitterXIcon from "./components/TwitterXIcon";
+import ClipIcon from "./components/ClipIcon";
 
 let videoElement = null;
 
@@ -87,7 +89,7 @@ const App = () => {
   const [videos, setVideos] = useState([]);
   const [showUserModal, setShowUserModal] = useState(false);
   const [user, setUser] = useState(null);
-  const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showShortcuts, setShowShortcuts] = useState(true);
   const [activeVideo, setActiveVideo] = useState(false);
 
   // use default playlist by default
@@ -103,6 +105,14 @@ const App = () => {
 
   const handleShowShortcuts = () => {
     setShowShortcuts(!showShortcuts);
+  };
+
+  const handleCopyToClipboard = (e) => {
+    e.preventDefault();
+
+    navigator.clipboard.writeText(
+      "🐟 COFI.SH brings you music from beautiful people and creative minds. https://cofi.sh"
+    );
   };
 
   useEffect(() => {
@@ -341,11 +351,29 @@ const App = () => {
       {lowPowerMode ? null : <Lines />}
       <Static ready={ready} />
       <TopLeft>
-        <GregIcon href="https://github.com/gerrgg" target="_blank">
-          <img src="/greg.png" />
+        <GregIcon
+          href="https://github.com/gerrgg"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="/greg.png" alt="Gregory Bastianelli - GERRGG" />
         </GregIcon>
-        <a href="https://github.com/gerrgg/cofi-backend" target="_blank">
+        <a
+          href="https://github.com/gerrgg/cofi-backend"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <GithubIcon />
+        </a>
+        <a
+          href={`https://twitter.com/intent/tweet?text=COFI.SH%20brings%20you%20music%20from%20beautiful%20people%20and%20creative%20minds.`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <TwitterXIcon />
+        </a>
+        <a href="#" onClick={handleCopyToClipboard}>
+          <ClipIcon />
         </a>
         <div onClick={handleShowShortcuts}>
           <KeyboardIcon showShortcuts={showShortcuts} />
