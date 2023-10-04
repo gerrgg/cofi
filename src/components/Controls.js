@@ -12,6 +12,11 @@ const Root = styled.div`
   left: 1rem;
   z-index: 12;
   color: #fff;
+
+  @media (max-width: 500px) {
+    max-width: 100%;
+    padding-right: 1rem;
+  }
 `;
 
 const Title = styled.h1`
@@ -19,8 +24,12 @@ const Title = styled.h1`
   font-weight: bold;
   font-size: 14px;
   margin-bottom: 15px;
-  max-width: 400px;
+  max-width: 500px;
   cursor: pointer;
+  max-height: 63px;
+  overflow: hidden;
+
+  overflow: ellipsis;
 
   &:hover {
     color: lightgreen;

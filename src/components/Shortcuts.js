@@ -2,10 +2,10 @@ import styled from "styled-components";
 
 const Root = styled.div`
   position: absolute;
-  top: 100px;
+  top: 4.5rem;
   right: 0;
   width: 400px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.75);
   z-index: 2;
   right: 1rem;
   border: 1px solid lightgreen;
@@ -15,6 +15,11 @@ const Root = styled.div`
   transition: opacity 0.3 ease;
   cursor: pointer;
   pointer-events: ${(props) => (props.showShortcuts ? "all" : "none")};
+
+  @media (max-width: 900px) {
+    padding: 1rem;
+    width: auto;
+  }
 `;
 
 const Heading = styled.h2`
@@ -23,6 +28,10 @@ const Heading = styled.h2`
   text-transform: uppercase;
   color: #fff;
   padding-bottom: 1rem;
+
+  @media (max-width: 900px) {
+    padding-bottom: 0;
+  }
 `;
 
 const Rows = styled.div`
@@ -30,18 +39,31 @@ const Rows = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   padding-top: 1rem;
+
+  @media (max-width: 900px) {
+    gap: 0rem;
+  }
 `;
 const Row = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
   color: #fff;
+
+  @media (max-width: 900px) {
+    gap: 0.5rem;
+  }
 `;
 
 const Image = styled.img`
   width: 35px;
   height: 35px;
   object-fit: contain;
+
+  @media (max-width: 900px) {
+    width: 25px;
+    height: 25px;
+  }
 `;
 const Label = styled.p`
   color: #fff;

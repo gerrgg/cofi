@@ -10,6 +10,18 @@ const Title = styled.h2`
   padding: 1.5rem 1rem;
   width: 100%;
   color: ${(props) => (props.active ? "lightgreen" : "#fff")};
+
+  @media (max-width: 1080px) {
+    max-width: 586px;
+    padding: 0.5rem 1rem;
+  }
+
+  @media (max-width: 500px) {
+    font-size: 9px;
+    max-height: 63px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
 `;
 
 const NewVideoTitle = styled(Title)`
@@ -36,6 +48,7 @@ const Root = styled.div`
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 5;
+  margin-bottom: 1rem;
 
   &:hover ${Title} {
     color: lightgreen;
@@ -48,17 +61,15 @@ const Root = styled.div`
   &:hover {
     border: 1px solid rgba(255, 255, 255, 0.25);
   }
-`;
 
-const NewVideoWrapper = styled(Root)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
+  @media (max-width: 1080px) {
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+  }
 
-  &:hover svg {
-    color: lightgreen;
+  @media (max-width: 500px) {
+    align-items: center;
   }
 `;
 
@@ -70,8 +81,63 @@ const ImageWrapper = styled.div`
   overflow: hidden;
   position: relative;
 
+  @media (max-width: 1080px) {
+    height: 100px;
+    display: flex;
+  }
+
   img {
     transform: scale(1.32);
+
+    @media (max-width: 1080px) {
+      transform: scale(1.2);
+      object-fit: cover;
+      height: auto;
+      display: flex;
+      width: 200px;
+    }
+
+    @media (max-width: 500px) {
+      width: 100px;
+      object-fit: contain;
+      align-items: center;
+    }
+  }
+`;
+
+const NewVideoWrapper = styled(Root)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  &:hover svg {
+    color: lightgreen;
+  }
+
+  @media (max-width: 1080px) {
+    position: fixed;
+    top: 5.5rem;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 67px;
+    margin: 0 auto;
+    display: flex;
+    min-height: auto;
+    padding: 0.5rem 1rem;
+    flex-direction: row;
+    padding: 0.5rem 1rem;
+    gap: 1rem;
+
+    ${Title} {
+      padding: 0;
+      display: none;
+    }
+
+    svg {
+      width: 67px;
+    }
   }
 `;
 

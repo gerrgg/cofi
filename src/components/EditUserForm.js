@@ -17,6 +17,11 @@ const Root = styled.div`
   border-radius: 15px;
   z-index: 1;
   cursor: auto;
+
+  @media (max-width: 750px) {
+    width: calc(100% - 2rem);
+    padding: 0.5rem 1rem 2.5rem;
+  }
 `;
 
 const Form = styled.form`
@@ -31,12 +36,18 @@ const FormGroup = styled.div`
   flex-direction: column;
 `;
 
+const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex-flow: row wrap;
+`;
+
 const Button = styled.button`
   background: transparent;
   border-radius: 8px;
   border: 1px solid lightgreen;
   padding: 12px;
-  max-width: 50%;
+  max-width: calc(50% - 2rem);
   width: 100%;
   cursor: pointer;
   margin: 0 auto;
@@ -53,6 +64,11 @@ const Button = styled.button`
   &:hover:not(&:disabled) {
     color: #fff;
     background: lightgreen;
+  }
+
+  @media (max-width: 750px) {
+    padding: 0.25rem 0.5rem;
+    font-size: 10px;
   }
 `;
 
@@ -78,6 +94,12 @@ const Heading = styled.h2`
   margin-bottom: 50px;
   text-align: center;
   font-size: 18px;
+
+  @media (max-width: 750px) {
+    padding: 1.5rem 0 2.5rem;
+    margin: 0;
+    font-size: 15px;
+  }
 `;
 
 const EditUserForm = ({
@@ -178,8 +200,10 @@ const EditUserForm = ({
           />
         </FormGroup>
 
-        <Button onClick={handleSubmit}>Update</Button>
-        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+        <ButtonWrapper>
+          <Button onClick={handleSubmit}>Update</Button>
+          <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+        </ButtonWrapper>
       </Form>
     </Root>
   );

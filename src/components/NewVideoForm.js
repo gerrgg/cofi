@@ -18,6 +18,11 @@ const Root = styled.div`
   border-radius: 15px;
   z-index: 10;
   cursor: auto;
+
+  @media (max-width: 750px) {
+    width: calc(100% - 2rem);
+    padding: 0.5rem 1rem 2.5rem;
+  }
 `;
 
 const Form = styled.form`
@@ -55,6 +60,11 @@ const Button = styled.button`
     color: #fff;
     background: lightgreen;
   }
+
+  @media (max-width: 750px) {
+    padding: 0.25rem 0.5rem;
+    font-size: 10px;
+  }
 `;
 
 const Remove = styled(XMarkIcon)`
@@ -89,6 +99,12 @@ const Heading = styled.h2`
   margin-bottom: 50px;
   text-align: center;
   font-size: 18px;
+
+  @media (max-width: 750px) {
+    padding: 1.5rem 0 2.5rem;
+    margin: 0;
+    font-size: 15px;
+  }
 `;
 
 const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {

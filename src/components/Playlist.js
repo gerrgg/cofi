@@ -18,6 +18,9 @@ const Root = styled.div`
   padding: 4.5rem 1rem 1rem;
   transition: opacity 0.3s ease;
   pointer-events: ${(props) => (props.showPlaylist ? "all" : "none")};
+  @media (max-width: 1080px) {
+    padding-top: 8.5rem;
+  }
 `;
 
 const PlaylistWrapper = styled.div`
@@ -25,7 +28,15 @@ const PlaylistWrapper = styled.div`
   gap: 30px 15px;
   flex-flow: row wrap;
   max-height: calc(100% - 200px);
-  overflow: scroll;
+  overflow: auto;
+
+  @media (max-width: 1080px) {
+    flex-direction: column;
+    height: 100%;
+    max-height: calc(100% - 120px);
+    padding-bottom: 3rem;
+    display: block;
+  }
 `;
 
 const Playlist = ({

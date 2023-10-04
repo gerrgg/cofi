@@ -18,6 +18,11 @@ const Root = styled.div`
   border-radius: 15px;
   z-index: 1;
   cursor: auto;
+
+  @media (max-width: 750px) {
+    width: calc(100% - 2rem);
+    padding: 2.5rem 1rem 2.5rem;
+  }
 `;
 
 const Form = styled.form`
@@ -84,6 +89,18 @@ const SuccessMessage = styled(ErrorMessage)`
   font-style: normal;
   max-width: 60%;
   margin: 0 auto 30px;
+`;
+
+const Heading = styled.h2`
+  margin-bottom: 50px;
+  text-align: center;
+  font-size: 18px;
+
+  @media (max-width: 750px) {
+    padding: 1.5rem 0 2.5rem;
+    margin: 0;
+    font-size: 15px;
+  }
 `;
 
 const LoginForm = ({
