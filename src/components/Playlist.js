@@ -18,8 +18,11 @@ const Root = styled.div`
   padding: 4.5rem 1rem 1rem;
   transition: opacity 0.3s ease;
   pointer-events: ${(props) => (props.showPlaylist ? "all" : "none")};
+
   @media (max-width: 1080px) {
     padding-top: 8.5rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 `;
 
@@ -31,6 +34,8 @@ const PlaylistWrapper = styled.div`
   overflow: auto;
 
   @media (max-width: 1080px) {
+    padding-right: 1rem;
+    padding-left: 1rem;
     flex-direction: column;
     height: 100%;
     max-height: calc(100% - 120px);

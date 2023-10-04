@@ -31,12 +31,17 @@ const UserRow = styled.div`
 
 const Trigger = styled.div`
   cursor: pointer;
+
   &:hover {
     color: lightgreen;
 
     svg {
       color: lightgreen;
     }
+  }
+
+  @media (max-width: 500px) {
+    font-size: 12px;
   }
 `;
 

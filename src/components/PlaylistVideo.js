@@ -39,6 +39,11 @@ const Remove = styled(XMarkIcon)`
   &:hover {
     opacity: 1 !important;
   }
+
+  @media (max-width: 500px) {
+    width: 15px;
+    height: 15px;
+  }
 `;
 
 const Root = styled.div`
@@ -49,6 +54,7 @@ const Root = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 5;
   margin-bottom: 1rem;
+  overflow: hidden;
 
   &:hover ${Title} {
     color: lightgreen;
@@ -70,6 +76,7 @@ const Root = styled.div`
 
   @media (max-width: 500px) {
     align-items: center;
+    height: 75px;
   }
 `;
 
@@ -99,8 +106,9 @@ const ImageWrapper = styled.div`
 
     @media (max-width: 500px) {
       width: 100px;
-      object-fit: contain;
+      object-fit: cover;
       align-items: center;
+      transform: scale(1.05);
     }
   }
 `;
@@ -129,6 +137,10 @@ const NewVideoWrapper = styled(Root)`
     flex-direction: row;
     padding: 0.5rem 1rem;
     gap: 1rem;
+    border: 1px solid lightgreen;
+    height: 47px;
+    width: 47px;
+    padding: 0.5rem;
 
     ${Title} {
       padding: 0;
@@ -136,7 +148,8 @@ const NewVideoWrapper = styled(Root)`
     }
 
     svg {
-      width: 67px;
+      flex-shrink: 0;
+      color: lightgreen;
     }
   }
 `;
