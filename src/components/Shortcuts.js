@@ -79,6 +79,9 @@ const Shortcuts = ({ showShortcuts, handleShowShortcuts }) => {
         <Row>
           <Image src="/letter-l-icon.png" /> -<Label>Low Power Mode</Label>
         </Row>
+        <Row>
+          <Image src="/letter-c-icon.png" /> -<Label>Show Shortcuts</Label>
+        </Row>
       </Rows>
     </Root>
   );

@@ -21,6 +21,10 @@ const Title = styled.h1`
   margin-bottom: 15px;
   max-width: 400px;
   cursor: pointer;
+
+  &:hover {
+    color: lightgreen;
+  }
 `;
 
 const Row = styled.div`
@@ -74,7 +78,7 @@ const Controls = ({
       </Title>
       <Row>
         <div onClick={togglePause}>
-          <PausePlay play={play} />
+          <PausePlay enableHover={true} play={play} />
         </div>
         <div onClick={handleShuffleClick}>
           <Shuffle />

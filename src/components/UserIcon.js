@@ -3,8 +3,8 @@ import styled from "styled-components";
 import Icon from "./Icon";
 
 const Svg = styled(Icon)`
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
 `;
 

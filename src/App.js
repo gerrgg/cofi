@@ -17,6 +17,7 @@ import UserControls from "./components/UserControls";
 import UserModal from "./components/UserModal";
 import Shortcuts from "./components/Shortcuts";
 import KeyboardIcon from "./components/KeyboardIcon";
+import GithubIcon from "./components/GithubIcon";
 
 let videoElement = null;
 
@@ -46,6 +47,30 @@ const TopLeft = styled.div`
   left: 1rem;
   top: 1rem;
   z-index: 2;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
+
+const GregIcon = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+
+  &:hover {
+    img {
+      filter: hue-rotate(90deg);
+    }
+  }
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 100%;
+  }
 `;
 
 const App = () => {
@@ -105,7 +130,6 @@ const App = () => {
 
   useEffect(() => {
     try {
-      console.log(videos);
       setActiveVideo(videos[currentVideoIndex].key);
     } catch (e) {
       console.log(e);
@@ -141,6 +165,8 @@ const App = () => {
   };
 
   const handleSetVideo = (key) => {
+    if (key === activeVideo) return;
+
     let index = null;
 
     videos.forEach((video, i) => {
@@ -202,7 +228,6 @@ const App = () => {
 
   // buggy
   useEffect(() => {
-    console.log(videos, videoElement);
     if (videos && videos.length && videoElement) {
       try {
         play
@@ -224,9 +249,20 @@ const App = () => {
   };
 
   const _onStateChange = (event) => {
-    console.log(event);
     setVideoStatus(event.data);
     setVideoTitle(event.target.videoTitle);
+  };
+
+  const handleMute = () => {
+    if (videoElement) {
+      if (videoElement.target.isMuted()) {
+        setVolumeLevel(videoElement.target.getVolume() / 10);
+        videoElement.target.unMute();
+      } else {
+        setVolumeLevel(0);
+        videoElement.target.mute();
+      }
+    }
   };
 
   function handler({ key, target }) {
@@ -256,10 +292,13 @@ const App = () => {
           handleShuffleGif();
           break;
         case "m":
-          handleSetVolume(0);
+          handleMute();
           break;
         case "l":
           setLowPowerMode(!lowPowerMode);
+          break;
+        case "c":
+          setShowShortcuts(!showShortcuts);
           break;
         default:
           console.log("unsupported " + key);
@@ -302,6 +341,12 @@ const App = () => {
       {lowPowerMode ? null : <Lines />}
       <Static ready={ready} />
       <TopLeft>
+        <GregIcon href="https://github.com/gerrgg" target="_blank">
+          <img src="/greg.png" />
+        </GregIcon>
+        <a href="https://github.com/gerrgg/cofi-backend" target="_blank">
+          <GithubIcon />
+        </a>
         <div onClick={handleShowShortcuts}>
           <KeyboardIcon showShortcuts={showShortcuts} />
         </div>

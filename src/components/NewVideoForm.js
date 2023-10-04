@@ -3,6 +3,7 @@ import { useState } from "react";
 import Input from "./Input";
 import axios from "axios";
 import videoService from "../services/video";
+import XMarkIcon from "../components/XMarkIcon";
 
 const Root = styled.div`
   width: 600px;
@@ -53,6 +54,18 @@ const Button = styled.button`
   &:hover:not(&:disabled) {
     color: #fff;
     background: lightgreen;
+  }
+`;
+
+const Remove = styled(XMarkIcon)`
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  color: #fff;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 1 !important;
   }
 `;
 
@@ -125,9 +138,17 @@ const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
     }, 3000);
   };
 
+  const closeForm = () => {
+    setShowForm(false);
+  };
+
   return (
     <Root onClick={(e) => e.stopPropagation()}>
       <Heading>Add Youtube Video</Heading>
+
+      <div onClick={closeForm}>
+        <Remove />
+      </div>
 
       <Form autoComplete="off">
         {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}

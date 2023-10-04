@@ -48,6 +48,7 @@ const Playlist = ({
   return (
     <Root onClick={handleShowPlaylist} showPlaylist={showPlaylist}>
       <PlaylistWrapper>
+        <NewVideo handleNewVideo={handleNewVideo} />
         {videos.map((video) => (
           <PlaylistVideo
             key={video.key}
@@ -58,7 +59,6 @@ const Playlist = ({
             videos={videos}
           />
         ))}
-        <NewVideo handleNewVideo={handleNewVideo} />
         {showForm ? (
           <NewVideoForm
             user={user}

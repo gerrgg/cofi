@@ -1,5 +1,8 @@
 const gifs = [
   {
+    filename: "hacker-hacker-man.gif",
+  },
+  {
     filename: "anime-buildings.gif",
   },
   {
@@ -21,19 +24,10 @@ const gifs = [
     filename: "monkey-music-monkey.gif",
   },
   {
-    filename: "taco-dance.gif",
-  },
-  {
     filename: "typing.gif",
   },
   {
     filename: "whisper-of-the-heart-shizuku.gif",
-  },
-  {
-    filename: "gabe-wake-up.gif",
-  },
-  {
-    filename: "tacos-cute.gif",
   },
 ];
 

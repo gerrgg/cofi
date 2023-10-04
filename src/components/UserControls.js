@@ -15,6 +15,20 @@ const Row = styled.div`
   align-items: center;
 `;
 
+const UserRow = styled.div`
+  display: flex;
+  gap: 15px;
+  align-items: center;
+
+  &:hover {
+    color: lightgreen;
+
+    svg {
+      color: lightgreen;
+    }
+  }
+`;
+
 const Trigger = styled.div`
   cursor: pointer;
   &:hover {
@@ -31,9 +45,10 @@ const UserControls = ({ handleUserIconClick, user, setUser }) => {
     <Root>
       <Row>
         {!user ? (
-          <div onClick={handleUserIconClick}>
+          <UserRow onClick={handleUserIconClick}>
+            <Trigger>Login</Trigger>
             <UserIcon />
-          </div>
+          </UserRow>
         ) : (
           <Trigger onClick={handleUserIconClick}>{user.username}</Trigger>
         )}

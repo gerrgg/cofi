@@ -104,13 +104,13 @@ const LoginForm = ({
     e.preventDefault();
     setUsername("");
     setPassword("");
-    setShowUserModal(false);
 
     try {
       const user = await loginService.login({ username, password });
       window.localStorage.setItem("loggedCofiUser", JSON.stringify(user));
       setUser(user);
       userService.setToken(user.token);
+      setShowUserModal(false);
     } catch (e) {
       setErrorMessage(e.response.data.error);
       setReadyForSubmit(false);

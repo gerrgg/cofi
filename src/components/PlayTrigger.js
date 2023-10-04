@@ -18,23 +18,25 @@ const Root = styled.div`
 `;
 
 const IconWrapper = styled.div`
-width: 100%;
-height: 100%;
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-z-index: 10;
-display: flex;
-justify-content: center;
-align-items: center;
-color: #fff;
-opacity: ${(props) => (props.show ? "1" : "0")};
-transition: opacity ${(props) => (props.show ? "0s" : "0.5s")}; ease-in-out;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  opacity: ${(props) => (props.show ? "1" : "0")};
+  transition: opacity ${(props) => (props.show ? "0s" : "0.5s")}; ease-in-out;
 
-&:hover{
-  opacity: 1;
-}
+  &:hover{
+    opacity: 1;
+
+   
+  }
 `;
 
 const PlayTrigger = ({ play, togglePause, ready }) => {

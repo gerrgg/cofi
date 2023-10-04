@@ -78,10 +78,10 @@ const ErrorMessage = styled.span`
 `;
 
 const RegisterForm = ({ setActiveForm, setSuccessMessage }) => {
-  const [username, setUsername] = useState("test");
-  const [email, setEmail] = useState("test@test.com");
-  const [password, setPassword] = useState("password");
-  const [confirmPassword, setConfirmPassword] = useState("password");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [readyForSubmit, setReadyForSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
 
@@ -111,7 +111,11 @@ const RegisterForm = ({ setActiveForm, setSuccessMessage }) => {
     e.preventDefault();
 
     try {
-      const user = await userService.create({ username, email, password });
+      const user = await userService.create({
+        username: username.trim(),
+        email,
+        password,
+      });
       setSuccessMessage("Registration successful, you can now login.");
       setActiveForm("login");
     } catch (e) {

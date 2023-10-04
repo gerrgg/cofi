@@ -16,6 +16,10 @@ const Level = styled.button`
   border: 0;
   opacity: ${(props) => (props.transparent ? "0.5" : "1")};
   cursor: pointer;
+
+  &:hover {
+    background: lightgreen;
+  }
 `;
 
 const Volume = ({ handleSetVolume, volumeLevel }) => {
@@ -37,7 +41,7 @@ const Volume = ({ handleSetVolume, volumeLevel }) => {
           key={`volume-${level}`}
           onClick={() => handleClick(level)}
           transparent={level > volumeLevel}
-        ></Level>
+        />
       ))}
     </Root>
   );
