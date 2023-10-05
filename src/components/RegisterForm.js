@@ -87,6 +87,18 @@ const ErrorMessage = styled.span`
   font-style: italic;
 `;
 
+const Heading = styled.h2`
+  margin-bottom: 50px;
+  text-align: center;
+  font-size: 18px;
+
+  @media (max-width: 750px) {
+    padding: 1.5rem 0 2.5rem;
+    margin: 0;
+    font-size: 15px;
+  }
+`;
+
 const RegisterForm = ({ setActiveForm, setSuccessMessage }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -142,6 +154,7 @@ const RegisterForm = ({ setActiveForm, setSuccessMessage }) => {
 
   return (
     <Root onClick={(e) => e.stopPropagation()}>
+      <Heading>Sign Up</Heading>
       <Form autoComplete="off">
         <input type={"hidden"} value={"prayer"} />
         {errorMessage ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}

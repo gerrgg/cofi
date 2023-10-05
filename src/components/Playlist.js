@@ -53,12 +53,17 @@ const Playlist = ({
   handleSetVideo,
   activePlaylist,
   setVideos,
+  setShowUserModal,
 }) => {
   const [showForm, setShowForm] = useState(false);
 
   const handleNewVideo = (e) => {
     e.stopPropagation();
-    setShowForm(!showForm);
+    if (user) {
+      setShowForm(!showForm);
+    } else {
+      setShowUserModal(true);
+    }
   };
 
   return (

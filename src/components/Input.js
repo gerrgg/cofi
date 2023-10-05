@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
-import CheckMarkIcon from "./CheckMarkIcon";
-import XMarkIcon from "./XMarkIcon";
+import CheckMarkIcon from "../components/CheckMarkIcon";
+import XMarkIcon from "../components/XMarkIcon";
 
 const Root = styled.div`
   position: relative;

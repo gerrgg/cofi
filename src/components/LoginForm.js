@@ -146,6 +146,7 @@ const LoginForm = ({
 
   return (
     <Root onClick={(e) => e.stopPropagation()}>
+      <Heading>Login or Sign Up</Heading>
       {successMessage ? (
         <SuccessMessage>{successMessage}</SuccessMessage>
       ) : null}

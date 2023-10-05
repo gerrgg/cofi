@@ -16,10 +16,7 @@ import Playlist from "./components/Playlist";
 import UserControls from "./components/UserControls";
 import UserModal from "./components/UserModal";
 import Shortcuts from "./components/Shortcuts";
-import KeyboardIcon from "./components/KeyboardIcon";
-import GithubIcon from "./components/GithubIcon";
-import TwitterXIcon from "./components/TwitterXIcon";
-import ClipIcon from "./components/ClipIcon";
+import TopLeft from "./components/TopLeft";
 
 let videoElement = null;
 
@@ -42,37 +39,6 @@ const VideoWrapper = styled.div`
   height: 1px;
   width: 1px;
   overflow hidden;
-`;
-
-const TopLeft = styled.div`
-  position: absolute;
-  left: 1rem;
-  top: 1rem;
-  z-index: 2;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-`;
-
-const GregIcon = styled.a`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-
-  &:hover {
-    img {
-      filter: hue-rotate(90deg);
-    }
-  }
-
-  img {
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-    border-radius: 100%;
-  }
 `;
 
 const App = () => {
@@ -328,6 +294,7 @@ const App = () => {
         handleSetVideo={handleSetVideo}
         setVideos={setVideos}
         user={user}
+        setShowUserModal={setShowUserModal}
       />
       <PlayTrigger
         ready={ready && showPlaylist === false}
@@ -335,7 +302,7 @@ const App = () => {
         togglePause={togglePause}
       />
       <VideoWrapper>
-        {console.log(activeVideo)}
+        {console.log(videos, activeVideo)}
         {videos && activeVideo ? (
           <YouTube
             style={{ zIndex: 1, position: "relative" }}
@@ -350,35 +317,11 @@ const App = () => {
       <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
       {lowPowerMode ? null : <Lines />}
       <Static ready={ready} />
-      <TopLeft>
-        <GregIcon
-          href="https://github.com/gerrgg"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="/greg.png" alt="Gregory Bastianelli - GERRGG" />
-        </GregIcon>
-        <a
-          href="https://github.com/gerrgg/cofi-backend"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <GithubIcon />
-        </a>
-        <a
-          href={`https://twitter.com/intent/tweet?text=COFI.SH%20brings%20you%20music%20from%20beautiful%20people%20and%20creative%20minds.`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <TwitterXIcon />
-        </a>
-        <a href="#" onClick={handleCopyToClipboard}>
-          <ClipIcon />
-        </a>
-        <div onClick={handleShowShortcuts}>
-          <KeyboardIcon showShortcuts={showShortcuts} />
-        </div>
-      </TopLeft>
+      <TopLeft
+        handleCopyToClipboard={handleCopyToClipboard}
+        handleShowShortcuts={handleShowShortcuts}
+        showShortcuts={showShortcuts}
+      />
       <UserControls
         handleUserIconClick={handleUserIconClick}
         showUserModal={showUserModal}

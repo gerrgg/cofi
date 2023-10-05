@@ -11,6 +11,10 @@ const Svg = styled(Icon)`
   &:hover {
     color: lightgreen;
   }
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `;
 
 const KeyboardIcon = ({ className, showShortcuts }) => (

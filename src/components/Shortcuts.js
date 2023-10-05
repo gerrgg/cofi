@@ -20,6 +20,10 @@ const Root = styled.div`
     padding: 1rem;
     width: auto;
   }
+
+  @media (max-width: 500px) {
+    display: none;
+  }
 `;
 
 const Heading = styled.h2`
