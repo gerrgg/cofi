@@ -5,6 +5,8 @@ import Next from "./Next";
 import Volume from "./Volume";
 import useSound from "use-sound";
 import { TypeAnimation } from "react-type-animation";
+import GifIcon from "./GifIcon";
+import GifForm from "./GifForm";
 
 const Root = styled.div`
   position: absolute;
@@ -51,6 +53,8 @@ const Controls = ({
   volumeLevel,
   videoTitle,
   handleShowPlaylist,
+  showGifForm,
+  setShowGifForm,
 }) => {
   const [playShuffle] = useSound("/sounds/shuffle.wav", {
     volume: 0.5,
@@ -61,8 +65,16 @@ const Controls = ({
     handleShuffleGif();
   };
 
+  const handleShowGifForm = () => {
+    setShowGifForm(!showGifForm);
+  };
+
   return (
     <Root>
+      <GifForm
+        showGifForm={showGifForm}
+        handleShowGifForm={handleShowGifForm}
+      />
       <Title onClick={handleShowPlaylist}>
         {videos.length ? (
           videoTitle
@@ -91,6 +103,9 @@ const Controls = ({
         </div>
         <div onClick={handleShuffleClick}>
           <Shuffle />
+        </div>
+        <div onClick={handleShowGifForm}>
+          <GifIcon />
         </div>
         {videos.length > 0 ? (
           <div onClick={handleNextVideo}>

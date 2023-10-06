@@ -31,7 +31,6 @@ const Heading = styled.h2`
   font-size: 15px;
   text-transform: uppercase;
   color: #fff;
-  padding-bottom: 1rem;
 
   @media (max-width: 900px) {
     padding-bottom: 0;
@@ -43,20 +42,12 @@ const Rows = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   padding-top: 1rem;
-
-  @media (max-width: 900px) {
-    gap: 0rem;
-  }
 `;
 const Row = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
   color: #fff;
-
-  @media (max-width: 900px) {
-    gap: 0.5rem;
-  }
+  gap: 0.5rem;
 `;
 
 const Image = styled.img`

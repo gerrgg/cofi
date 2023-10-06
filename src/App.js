@@ -55,8 +55,9 @@ const App = () => {
   const [videos, setVideos] = useState([]);
   const [showUserModal, setShowUserModal] = useState(false);
   const [user, setUser] = useState(null);
-  const [showShortcuts, setShowShortcuts] = useState(true);
+  const [showShortcuts, setShowShortcuts] = useState(false);
   const [activeVideo, setActiveVideo] = useState(false);
+  const [showGifForm, setShowGifForm] = useState(false);
 
   // use default playlist by default
   const getAllVideos = async () => {
@@ -102,6 +103,10 @@ const App = () => {
       const user = JSON.parse(loggedCofiUser);
       setUser(user);
     }
+  }, []);
+
+  useEffect(() => {
+    handleShuffleGif();
   }, []);
 
   useEffect(() => {
@@ -284,8 +289,14 @@ const App = () => {
 
   useEventListener("keydown", handler);
 
+  const handleClicks = (e) => {
+    if (showGifForm) {
+      setShowGifForm(!showGifForm);
+    }
+  };
+
   return (
-    <Root>
+    <Root onClick={handleClicks}>
       <Playlist
         videos={videos}
         showPlaylist={showPlaylist}
@@ -302,7 +313,6 @@ const App = () => {
         togglePause={togglePause}
       />
       <VideoWrapper>
-        {console.log(videos, activeVideo)}
         {videos && activeVideo ? (
           <YouTube
             style={{ zIndex: 1, position: "relative" }}
@@ -348,6 +358,8 @@ const App = () => {
           handleSetVolume={handleSetVolume}
           videoTitle={videoTitle}
           handleShowPlaylist={handleShowPlaylist}
+          showGifForm={showGifForm}
+          setShowGifForm={setShowGifForm}
         />
       ) : (
         <Welcome ready={ready} />

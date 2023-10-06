@@ -15,7 +15,7 @@ const Root = styled.div`
   background: rgba(0, 0, 0, 0.5);
   overflow: hidden;
   color: #fff;
-  padding: 4.5rem 1rem 1rem;
+  padding: 3.5rem 1rem 1rem;
   transition: opacity 0.3s ease;
   pointer-events: ${(props) => (props.showPlaylist ? "all" : "none")};
 
@@ -28,9 +28,9 @@ const Root = styled.div`
 
 const PlaylistWrapper = styled.div`
   display: flex;
-  gap: 30px 15px;
+  gap: 15px;
   flex-flow: row wrap;
-  max-height: calc(100% - 200px);
+  max-height: calc(100% - 110px);
   overflow: auto;
 
   @media (max-width: 1080px) {
@@ -72,6 +72,7 @@ const Playlist = ({
         <NewVideo handleNewVideo={handleNewVideo} />
         {videos.map((video) => (
           <PlaylistVideo
+            user={user}
             key={video.key}
             video={video}
             handleSetVideo={handleSetVideo}

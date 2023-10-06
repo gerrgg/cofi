@@ -48,13 +48,17 @@ const Remove = styled(XMarkIcon)`
 
 const Root = styled.div`
   position: relative;
-  background: #000;
-  width: calc(20% - 15px);
+  background: rgba(0, 0, 0, 0.5);
+  width: calc(14% - 15px);
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 5;
   margin-bottom: 1rem;
   overflow: hidden;
+  width: calc(20% - 15px);
+
+  @media (max-width: 1200px) {
+  }
 
   &:hover ${Title} {
     color: lightgreen;
@@ -119,9 +123,15 @@ const NewVideoWrapper = styled(Root)`
   justify-content: center;
   align-items: center;
   min-height: 200px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  &:hover svg {
-    color: lightgreen;
+  background: transparent;
+  border: none;
+
+  &:hover {
+    border: none;
+  }
+
+  ${Title} {
+    display: none;
   }
 
   @media (max-width: 1080px) {
@@ -140,7 +150,7 @@ const NewVideoWrapper = styled(Root)`
     border: 1px solid lightgreen;
     height: 47px;
     width: 47px;
-    padding: 0.5rem;
+    padding: 0rem;
 
     ${Title} {
       padding: 0;
@@ -154,7 +164,30 @@ const NewVideoWrapper = styled(Root)`
   }
 `;
 
+const Inner = styled.div`
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  height: 200px;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+
+  &:hover svg {
+    color: lightgreen;
+  }
+
+  &:hover {
+    border: 1px solid lightgreen;
+  }
+
+  @media (max-width: 1080px) {
+    height: 100%;
+  }
+`;
+
 const PlaylistVideo = ({
+  user,
   video,
   active,
   handleSetVideo,
@@ -178,19 +211,22 @@ const PlaylistVideo = ({
         <img src={video.thumbnail} alt={video.key} />
       </ImageWrapper>
       <Title active={active}>{video.title}</Title>
-
-      <div onClick={handleRemove}>
-        <Remove />
-      </div>
+      {user && user.id === video.user ? (
+        <div onClick={handleRemove}>
+          <Remove />
+        </div>
+      ) : null}
     </Root>
   );
 };
 
 const NewVideo = ({ handleNewVideo }) => {
   return (
-    <NewVideoWrapper onClick={handleNewVideo}>
-      <IconWrapper />
-      <NewVideoTitle>Add Video</NewVideoTitle>
+    <NewVideoWrapper>
+      <Inner onClick={handleNewVideo}>
+        <IconWrapper />
+        <NewVideoTitle>Add Video</NewVideoTitle>
+      </Inner>
     </NewVideoWrapper>
   );
 };

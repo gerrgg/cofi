@@ -15,7 +15,7 @@ const Root = styled.div`
     position: absolute;
     left: 0;
     top: 0;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.3);
     width: 100%;
     height: 100%;
   }

@@ -6,7 +6,6 @@ const Svg = styled(Icon)`
   width: 24px;
   height: 24px;
   cursor: pointer;
-  color: red;
 `;
 
 const CheckMarkIcon = ({ className }) => (
