@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import Input from "./Input";
 import axios from "axios";
-import videoService from "../services/video";
+import gifService from "../services/gif";
 
 const Root = styled.div`
   height: auto;
@@ -57,28 +57,83 @@ const Results = styled.div`
   padding: 5px;
 `;
 
-const Result = styled.img`
+const Result = styled.div`
   width: calc(50% - 3px);
   height: calc(20vh - 20px);
-  object-fit: cover;
   cursor: pointer;
   border: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 101;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &::after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    content: "";
+    display: ${(props) => (props.added ? "block" : "none")};
+  }
 
   &:hover {
     border-color: lightgreen;
   }
 `;
 
-const Gif = ({ result }) => {
-  const handleClick = ({ target }) => {
-    console.log(target.src);
+const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex }) => {
+  const [added, setAdded] = useState(false);
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    if (user) {
+      gifService.setToken(user.token);
+    }
+
+    try {
+      const data = {
+        url: result.media_formats.gif.url,
+        title: result.content_description,
+      };
+
+      if (user) {
+        const response = await gifService.create(data);
+        setGifs(gifs.concat(response));
+        setActiveGifIndex(gifs.length);
+      } else {
+        setGifs(gifs.concat(data));
+      }
+
+      setAdded(true);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  return <Result onClick={handleClick} src={result.media_formats.gif.url} />;
+  return (
+    <Result added={added} onClick={handleClick}>
+      <img src={result.media_formats.gif.url} />
+    </Result>
+  );
 };
 
-const GifForm = ({ showGifForm, handleShowGifForm }) => {
+const GifForm = ({
+  showGifForm,
+  handleShowGifForm,
+  user,
+  gifs,
+  setGifs,
+  setActiveGifIndex,
+}) => {
   const [value, setValue] = useState("");
   const [results, setResults] = useState([]);
 
@@ -90,7 +145,7 @@ const GifForm = ({ showGifForm, handleShowGifForm }) => {
   useEffect(() => {
     var apikey = " AIzaSyCNqelwphJXrYnLY-I-xbTNkiXgkwuwS_I";
     var clientkey = "my_test_app";
-    var lmt = 16;
+    var lmt = 25;
 
     // test search term
     var search_term = value;
@@ -116,7 +171,14 @@ const GifForm = ({ showGifForm, handleShowGifForm }) => {
       {results.length > 0 ? (
         <Results>
           {results.map((result) => (
-            <Gif result={result}></Gif>
+            <Gif
+              setGifs={setGifs}
+              gifs={gifs}
+              user={user}
+              key={result.id}
+              result={result}
+              setActiveGifIndex={setActiveGifIndex}
+            ></Gif>
           ))}
         </Results>
       ) : null}

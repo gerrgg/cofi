@@ -4,7 +4,7 @@ const Root = styled.div`
   width: 100vw;
   height: 100vh;
   border: 0;
-  background: url(/gifs/${(props) => props.file}) center/cover no-repeat;
+  background: url(${(props) => props.file}) center/cover no-repeat;
   position: absolute;
   top: 0;
   left: 0;
@@ -22,7 +22,7 @@ const Root = styled.div`
 `;
 
 const Gif = ({ activeGif }) => {
-  return <Root file={activeGif} />;
+  return <Root file={activeGif.url} />;
 };
 
 export default Gif;

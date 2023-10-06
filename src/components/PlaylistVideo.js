@@ -18,7 +18,8 @@ const Title = styled.h2`
 
   @media (max-width: 500px) {
     font-size: 9px;
-    max-height: 63px;
+    max-height: 53px;
+    padding: 0 1rem;
     overflow: hidden;
     box-sizing: border-box;
   }

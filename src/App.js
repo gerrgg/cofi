@@ -10,7 +10,6 @@ import Controls from "./components/Controls";
 import Welcome from "./components/Welcome";
 import PlayTrigger from "./components/PlayTrigger";
 import Lines from "./components/Lines";
-import gifs from "./gifs";
 import Static from "./components/Static";
 import Playlist from "./components/Playlist";
 import UserControls from "./components/UserControls";
@@ -46,7 +45,6 @@ const App = () => {
   const [init, setInit] = useState(false);
   const [ready, setReady] = useState(false);
   const [lowPowerMode, setLowPowerMode] = useState(false);
-  const [activeGifIndex, setActiveGifIndex] = useState(0);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [videoStatus, setVideoStatus] = useState(-1);
   const [volumeLevel, setVolumeLevel] = useState(10);
@@ -58,6 +56,8 @@ const App = () => {
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [activeVideo, setActiveVideo] = useState(false);
   const [showGifForm, setShowGifForm] = useState(false);
+  const [gifs, setGifs] = useState([]);
+  const [activeGifIndex, setActiveGifIndex] = useState(0);
 
   // use default playlist by default
   const getAllVideos = async () => {
@@ -67,6 +67,17 @@ const App = () => {
 
   const getUserVideos = async () => {
     const response = await axios.get(`/api/users/${user.username}/videos`);
+    setVideos(response.data);
+  };
+
+  const getAllGifs = async () => {
+    const response = await axios.get(`/api/gifs`);
+    setGifs(response.data);
+    setActiveGifIndex(Math.floor(Math.random() * response.data.length));
+  };
+
+  const getUserGifs = async () => {
+    const response = await axios.get(`/api/users/${user.username}/gifs`);
     setVideos(response.data);
   };
 
@@ -86,7 +97,9 @@ const App = () => {
     try {
       if (user && user.username) {
         getUserVideos();
+        getUserGifs();
       } else {
+        getAllGifs();
         getAllVideos();
       }
 
@@ -106,10 +119,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    handleShuffleGif();
-  }, []);
-
-  useEffect(() => {
     try {
       setActiveVideo(videos[currentVideoIndex].key);
     } catch (e) {
@@ -126,9 +135,13 @@ const App = () => {
   };
 
   const handleShuffleGif = () => {
-    playBoop();
-    const random = Math.floor(Math.random() * gifs.length);
-    random !== activeGifIndex ? setActiveGifIndex(random) : handleShuffleGif();
+    if (gifs.length !== 1) {
+      playBoop();
+      const random = Math.floor(Math.random() * gifs.length);
+      random !== activeGifIndex
+        ? setActiveGifIndex(random)
+        : handleShuffleGif();
+    }
   };
 
   const handleNextVideo = () => {
@@ -324,7 +337,11 @@ const App = () => {
           />
         ) : null}
       </VideoWrapper>
-      <Gif activeGif={gifs[activeGifIndex].filename} play={play} />
+
+      {gifs.length ? (
+        <Gif activeGif={gifs[activeGifIndex]} play={play} />
+      ) : null}
+
       {lowPowerMode ? null : <Lines />}
       <Static ready={ready} />
       <TopLeft
@@ -360,6 +377,10 @@ const App = () => {
           handleShowPlaylist={handleShowPlaylist}
           showGifForm={showGifForm}
           setShowGifForm={setShowGifForm}
+          user={user}
+          setGifs={setGifs}
+          gifs={gifs}
+          setActiveGifIndex={setActiveGifIndex}
         />
       ) : (
         <Welcome ready={ready} />

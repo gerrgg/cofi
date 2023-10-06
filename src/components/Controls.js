@@ -14,6 +14,8 @@ const Root = styled.div`
   left: 1rem;
   z-index: 12;
   color: #fff;
+  width: 100%;
+  max-width: 500px;
 
   @media (max-width: 500px) {
     max-width: 100%;
@@ -55,6 +57,10 @@ const Controls = ({
   handleShowPlaylist,
   showGifForm,
   setShowGifForm,
+  user,
+  setGifs,
+  gifs,
+  setActiveGifIndex,
 }) => {
   const [playShuffle] = useSound("/sounds/shuffle.wav", {
     volume: 0.5,
@@ -74,6 +80,10 @@ const Controls = ({
       <GifForm
         showGifForm={showGifForm}
         handleShowGifForm={handleShowGifForm}
+        user={user}
+        setGifs={setGifs}
+        gifs={gifs}
+        setActiveGifIndex={setActiveGifIndex}
       />
       <Title onClick={handleShowPlaylist}>
         {videos.length ? (
