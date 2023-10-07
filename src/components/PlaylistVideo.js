@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import axios from "axios";
 import PlusIcon from "./PlusIcon";
 import XMarkIcon from "./XMarkIcon";
 import VideoService from "../services/video";
@@ -197,6 +195,8 @@ const PlaylistVideo = ({
 }) => {
   const handleRemove = async (e) => {
     e.stopPropagation();
+
+    VideoService.setToken(user.token);
 
     try {
       await VideoService.remove(video.id);

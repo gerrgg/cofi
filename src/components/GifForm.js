@@ -133,7 +133,7 @@ const MyGifRoot = styled(Result)`
   }
 `;
 
-const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex }) => {
+const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex, setValue }) => {
   const [added, setAdded] = useState(false);
 
   const handleClick = async (e) => {
@@ -155,6 +155,8 @@ const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex }) => {
         setGifs(gifs.concat(data));
       }
 
+      setValue("");
+
       setActiveGifIndex(gifs.length);
       setAdded(true);
     } catch (e) {
@@ -173,8 +175,8 @@ const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex }) => {
   );
 };
 
-const MyGif = ({ setGifs, result, setActiveGifIndex, gifs }) => {
-  const handleRemove = (e) => {
+const MyGif = ({ user, setGifs, result, setActiveGifIndex, gifs }) => {
+  const handleRemove = async (e) => {
     e.stopPropagation();
     const newGifs = gifs.filter((gif) => gif.id !== result.id);
 
@@ -183,11 +185,14 @@ const MyGif = ({ setGifs, result, setActiveGifIndex, gifs }) => {
     }
 
     setGifs(newGifs);
-    // setGifs(gifs.filter((gif) => gif.id !== result.id));
-    // console.log(e.target, gifs);
 
-    // need to remove gif from db
-    // fix bug when last gif is removed
+    try {
+      gifService.setToken(user.token);
+      await gifService.remove(result.id);
+      setGifs(newGifs);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleClick = async (e) => {
@@ -201,9 +206,11 @@ const MyGif = ({ setGifs, result, setActiveGifIndex, gifs }) => {
   return (
     <MyGifRoot onClick={handleClick}>
       <img src={result.url} alt={result.title} />
-      <div onClick={handleRemove}>
-        <Remove />
-      </div>
+      {user && result.user === user.id ? (
+        <div onClick={handleRemove}>
+          <Remove />
+        </div>
+      ) : null}
     </MyGifRoot>
   );
 };
@@ -262,6 +269,7 @@ const GifForm = ({
               key={result.id}
               result={result}
               setActiveGifIndex={setActiveGifIndex}
+              setValue={setValue}
             ></Gif>
           ))}
         </Results>

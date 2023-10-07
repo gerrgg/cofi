@@ -102,6 +102,8 @@ const App = () => {
         getAllGifs();
         getAllVideos();
       }
+
+      setActiveVideo(videos[currentVideoIndex].key);
     } catch (e) {
       console.log(e);
     }
@@ -112,7 +114,7 @@ const App = () => {
   }, [gifs, setActiveGifIndex, activeGifIndex]);
 
   useEffect(() => {
-    if (videos.length) {
+    if (videos[currentVideoIndex]) {
       setActiveVideo(videos[currentVideoIndex].key);
     }
   }, [videos, setCurrentVideoIndex, currentVideoIndex]);
@@ -341,7 +343,9 @@ const App = () => {
       {gifs && currentGif ? <Gif activeGif={currentGif} play={play} /> : null}
 
       {lowPowerMode ? null : <Lines />}
+
       <Static ready={ready} />
+
       <TopLeft
         handleCopyToClipboard={handleCopyToClipboard}
         handleShowShortcuts={handleShowShortcuts}
