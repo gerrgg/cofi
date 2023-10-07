@@ -58,6 +58,7 @@ const App = () => {
   const [showGifForm, setShowGifForm] = useState(false);
   const [gifs, setGifs] = useState([]);
   const [activeGifIndex, setActiveGifIndex] = useState(0);
+  const [currentGif, setCurrentGif] = useState(null);
 
   // use default playlist by default
   const getAllVideos = async () => {
@@ -71,14 +72,13 @@ const App = () => {
   };
 
   const getAllGifs = async () => {
-    const response = await axios.get(`/api/gifs`);
+    const response = await axios.get(`/api/users/default/gifs`);
     setGifs(response.data);
-    setActiveGifIndex(Math.floor(Math.random() * response.data.length));
   };
 
   const getUserGifs = async () => {
     const response = await axios.get(`/api/users/${user.username}/gifs`);
-    setVideos(response.data);
+    setGifs(response.data);
   };
 
   const handleShowShortcuts = () => {
@@ -102,12 +102,20 @@ const App = () => {
         getAllGifs();
         getAllVideos();
       }
-
-      setActiveVideo(videos[currentVideoIndex].key);
     } catch (e) {
       console.log(e);
     }
   }, [user, setUser]);
+
+  useEffect(() => {
+    setCurrentGif(gifs[activeGifIndex]);
+  }, [gifs, setActiveGifIndex, activeGifIndex]);
+
+  useEffect(() => {
+    if (videos.length) {
+      setActiveVideo(videos[currentVideoIndex].key);
+    }
+  }, [videos, setCurrentVideoIndex, currentVideoIndex]);
 
   useEffect(() => {
     const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
@@ -117,14 +125,6 @@ const App = () => {
       setUser(user);
     }
   }, []);
-
-  useEffect(() => {
-    try {
-      setActiveVideo(videos[currentVideoIndex].key);
-    } catch (e) {
-      console.log(e);
-    }
-  }, [videos, currentVideoIndex]);
 
   const handleUserIconClick = () => {
     setShowUserModal(!showUserModal);
@@ -338,9 +338,7 @@ const App = () => {
         ) : null}
       </VideoWrapper>
 
-      {gifs.length ? (
-        <Gif activeGif={gifs[activeGifIndex]} play={play} />
-      ) : null}
+      {gifs && currentGif ? <Gif activeGif={currentGif} play={play} /> : null}
 
       {lowPowerMode ? null : <Lines />}
       <Static ready={ready} />

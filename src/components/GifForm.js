@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Input from "./Input";
 import axios from "axios";
 import gifService from "../services/gif";
+import CheckMarkIcon from "./CheckMarkIcon";
+import XMarkIcon from "./XMarkIcon";
 
 const Root = styled.div`
   height: auto;
@@ -16,8 +18,9 @@ const Root = styled.div`
   cursor: auto;
   opacity: ${(props) => (props.showGifForm ? "1" : "0")};
   pointer-events: ${(props) => (props.showGifForm ? "all" : "none")};
+  box-sizing: border-box;
 
-  @media (max-width: 500px) {
+  @media (max-width: 550px) {
     width: calc(100% - 1rem);
   }
 `;
@@ -90,6 +93,46 @@ const Result = styled.div`
   }
 `;
 
+const Icon = styled(CheckMarkIcon)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: ${(props) => (props.added ? "block" : "none")};
+  z-index: 100;
+`;
+
+const Remove = styled(XMarkIcon)`
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  color: #fff;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 100;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 500px) {
+    // width: 15px;
+    // height: 15px;
+  }
+`;
+
+const MyGifRoot = styled(Result)`
+  &:hover {
+    svg {
+      opacity: 0.5;
+    }
+  }
+
+  svg:hover {
+    opacity: 1;
+  }
+`;
+
 const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex }) => {
   const [added, setAdded] = useState(false);
 
@@ -108,11 +151,11 @@ const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex }) => {
       if (user) {
         const response = await gifService.create(data);
         setGifs(gifs.concat(response));
-        setActiveGifIndex(gifs.length);
       } else {
         setGifs(gifs.concat(data));
       }
 
+      setActiveGifIndex(gifs.length);
       setAdded(true);
     } catch (e) {
       console.log(e);
@@ -121,8 +164,47 @@ const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex }) => {
 
   return (
     <Result added={added} onClick={handleClick}>
-      <img src={result.media_formats.gif.url} />
+      <img
+        src={result.media_formats.gif.url}
+        alt={result.content_description}
+      />
+      <Icon added={added} />
     </Result>
+  );
+};
+
+const MyGif = ({ setGifs, result, setActiveGifIndex, gifs }) => {
+  const handleRemove = (e) => {
+    e.stopPropagation();
+    const newGifs = gifs.filter((gif) => gif.id !== result.id);
+
+    if (result === gifs[gifs.length - 1]) {
+      setActiveGifIndex(0);
+    }
+
+    setGifs(newGifs);
+    // setGifs(gifs.filter((gif) => gif.id !== result.id));
+    // console.log(e.target, gifs);
+
+    // need to remove gif from db
+    // fix bug when last gif is removed
+  };
+
+  const handleClick = async (e) => {
+    gifs.forEach((g, i) => {
+      if (g.id === result.id) {
+        setActiveGifIndex(i);
+      }
+    });
+  };
+
+  return (
+    <MyGifRoot onClick={handleClick}>
+      <img src={result.url} alt={result.title} />
+      <div onClick={handleRemove}>
+        <Remove />
+      </div>
+    </MyGifRoot>
   );
 };
 
@@ -163,6 +245,8 @@ const GifForm = ({
 
     if (value !== "") {
       getData(search_url);
+    } else {
+      setResults([]);
     }
   }, [value, setValue]);
 
@@ -181,7 +265,20 @@ const GifForm = ({
             ></Gif>
           ))}
         </Results>
-      ) : null}
+      ) : (
+        <Results>
+          {gifs.map((result) => (
+            <MyGif
+              setGifs={setGifs}
+              gifs={gifs}
+              user={user}
+              key={result.id}
+              result={result}
+              setActiveGifIndex={setActiveGifIndex}
+            ></MyGif>
+          ))}
+        </Results>
+      )}
       <Form autoComplete="off">
         <FormGroup>
           <Input

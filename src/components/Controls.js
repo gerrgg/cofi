@@ -18,8 +18,7 @@ const Root = styled.div`
   max-width: 500px;
 
   @media (max-width: 500px) {
-    max-width: 100%;
-    padding-right: 1rem;
+    max-width: calc(100% - 1rem);
   }
 `;
 
