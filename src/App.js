@@ -28,6 +28,7 @@ const Root = styled.main`
 
   * {
     text-shadow: 2px 2px black;
+    // outline: 1px solid red;
   }
 `;
 

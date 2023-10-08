@@ -6,6 +6,10 @@ const Root = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+
+  @media (max-width: 500px) {
+    gap: 6px;
+  }
 `;
 
 const Level = styled.button`
