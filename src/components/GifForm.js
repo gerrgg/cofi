@@ -133,7 +133,15 @@ const MyGifRoot = styled(Result)`
   }
 `;
 
-const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex, setValue }) => {
+const Gif = ({
+  result,
+  user,
+  setGifs,
+  gifs,
+  setActiveGifIndex,
+  setValue,
+  setResults,
+}) => {
   const [added, setAdded] = useState(false);
 
   const handleClick = async (e) => {
@@ -156,6 +164,7 @@ const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex, setValue }) => {
       }
 
       setValue("");
+      setResults([]);
 
       setActiveGifIndex(gifs.length);
       setAdded(true);
@@ -175,7 +184,16 @@ const Gif = ({ result, user, setGifs, gifs, setActiveGifIndex, setValue }) => {
   );
 };
 
-const MyGif = ({ user, setGifs, result, setActiveGifIndex, gifs }) => {
+const MyGif = ({
+  user,
+  setGifs,
+  result,
+  setActiveGifIndex,
+  gifs,
+  handleShowGifForm,
+  setResults,
+  setValue,
+}) => {
   const handleRemove = async (e) => {
     e.stopPropagation();
     const newGifs = gifs.filter((gif) => gif.id !== result.id);
@@ -199,6 +217,9 @@ const MyGif = ({ user, setGifs, result, setActiveGifIndex, gifs }) => {
     gifs.forEach((g, i) => {
       if (g.id === result.id) {
         setActiveGifIndex(i);
+        handleShowGifForm();
+        setResults([]);
+        setValue("");
       }
     });
   };
@@ -269,6 +290,8 @@ const GifForm = ({
               key={result.id}
               result={result}
               setActiveGifIndex={setActiveGifIndex}
+              setResults={setResults}
+              setValue={setValue}
             ></Gif>
           ))}
         </Results>
@@ -282,6 +305,9 @@ const GifForm = ({
               key={result.id}
               result={result}
               setActiveGifIndex={setActiveGifIndex}
+              handleShowGifForm={handleShowGifForm}
+              setResults={setResults}
+              setValue={setValue}
             ></MyGif>
           ))}
         </Results>
@@ -291,7 +317,6 @@ const GifForm = ({
           <Input
             onChangeCallback={onChangeCallback}
             type="text"
-            label={"Search Tenor"}
             setValue={setValue}
           />
         </FormGroup>

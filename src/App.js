@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import useSound from "use-sound";
 import useEventListener from "./hooks/useEventListener";
 import axios from "axios";
-
+import ReactGA from "react-ga";
 import YouTube from "react-youtube";
 import Gif from "./components/Gif";
 import Controls from "./components/Controls";
@@ -40,6 +40,9 @@ const VideoWrapper = styled.div`
   width: 1px;
   overflow hidden;
 `;
+
+ReactGA.initialize("G-918KJ7145K");
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const App = () => {
   const [play, setPlay] = useState(false);
@@ -102,13 +105,19 @@ const App = () => {
     setShowPlaylist(!showPlaylist);
   };
 
+  const getRandom = (array, callback, exclude) => {
+    const random = Math.floor(Math.random() * array.length);
+    random !== exclude ? callback(random) : getRandom(array, callback);
+  };
+
   const handleShuffleGif = () => {
-    if (gifs.length !== 1) {
-      playBoop();
-      const random = Math.floor(Math.random() * gifs.length);
-      random !== activeGifIndex
-        ? setActiveGifIndex(random)
-        : handleShuffleGif();
+    if (gifs.length !== 1 && videos.length !== 1) {
+      // playBoop();
+      getRandom(gifs, setActiveGifIndex, activeGifIndex);
+      getRandom(videos, setCurrentVideoIndex, currentVideoIndex);
+      setVideoTitle(null);
+      playStatic();
+      setReady(false);
     }
   };
 
@@ -135,7 +144,7 @@ const App = () => {
       if (video.key === key) index = i;
     });
 
-    handleShuffleGif();
+    // handleShuffleGif();
     setCurrentVideoIndex(index);
 
     setVideoTitle(null);
@@ -191,7 +200,6 @@ const App = () => {
   // buggy
   useEffect(() => {
     if (videos && videos.length && videoElement) {
-      console.log("play video");
       try {
         play
           ? videoElement.target.playVideo()
@@ -241,6 +249,11 @@ const App = () => {
       console.log(e);
     }
   }, [user, setUser]);
+
+  const getUserStuff = async () => {
+    await getUserVideos();
+    await getUserGifs();
+  };
 
   useEffect(() => {
     setCurrentGif(gifs[activeGifIndex]);

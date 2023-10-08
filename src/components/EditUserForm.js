@@ -3,6 +3,7 @@ import { useState } from "react";
 import Input from "./Input";
 import { useEffect } from "react";
 import userService from "../services/user";
+import XMarkIcon from "./XMarkIcon";
 
 const Root = styled.div`
   width: 600px;
@@ -21,6 +22,29 @@ const Root = styled.div`
   @media (max-width: 750px) {
     width: calc(100% - 2rem);
     padding: 0.5rem 1rem 2.5rem;
+    height: calc(100vh -150px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+`;
+
+const Remove = styled(XMarkIcon)`
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  color: #fff;
+  transition: all 0.3s ease;
+  z-index: 100;
+  height: 32px;
+  width: 32px;
+  &:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 500px) {
+    // width: 15px;
+    // height: 15px;
   }
 `;
 
@@ -28,6 +52,7 @@ const Form = styled.form`
   display: flex;
   gap: 15px;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const FormGroup = styled.div`
@@ -112,7 +137,6 @@ const EditUserForm = ({
   const [email, setEmail] = useState(user.email);
   const [name, setName] = useState(user.name);
   const [password, setPassword] = useState("");
-
   const [errorMessage, setErrorMessage] = useState(false);
 
   const handleLogout = () => {
@@ -154,16 +178,15 @@ const EditUserForm = ({
     }, 3000);
   };
 
-  // useEffect(() => {
-  //   if (user) {
-  //     setUsername(user.username);
-  //     setEmail(user.email);
-  //     setName(user.name ? user.name : "");
-  //   }
-  // }, [user]);
-
   return (
     <Root onClick={(e) => e.stopPropagation()}>
+      <div
+        onClick={() => {
+          setShowUserModal(false);
+        }}
+      >
+        <Remove></Remove>
+      </div>
       <Heading>Edit User</Heading>
 
       <Form autoComplete="off">

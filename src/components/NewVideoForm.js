@@ -22,6 +22,11 @@ const Root = styled.div`
   @media (max-width: 750px) {
     width: calc(100% - 2rem);
     padding: 0.5rem 1rem 2.5rem;
+    height: calc(100vh - 275px);
+    display: flex;
+    flex-direction: column;
+    top: 55px;
+    transform: translate(-50%, 0%);
   }
 `;
 
@@ -102,7 +107,7 @@ const Heading = styled.h2`
   font-size: 18px;
 
   @media (max-width: 750px) {
-    padding: 1.5rem 0 2.5rem;
+    padding: 2.5rem 0 2rem;
     margin: 0;
     font-size: 15px;
   }
@@ -115,13 +120,17 @@ const Results = styled.div`
   background: rgba(0, 0, 0);
   height: auto;
   position: absolute;
-  top: 100%;
+  top: calc(100% - 1px);
   transform: translateY(0%);
   border: 1px solid rgba(255, 255, 255, 0.5);
   padding: 1rem;
   width: 100%;
   max-height: 25vh;
   overflow: auto;
+
+  @media (max-width: 750px) {
+    max-height: 38vh;
+  }
 `;
 
 const SearchResultRoot = styled.div`
@@ -144,7 +153,7 @@ const SearchResult = ({ result, setVideo, setResults }) => {
     setResults([]);
   };
   return (
-    <SearchResultRoot onClick={onClick}>
+    <SearchResultRoot key={result.id.videoId} onClick={onClick}>
       {result.snippet.title}
     </SearchResultRoot>
   );
@@ -160,7 +169,7 @@ const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
     var regExp =
       /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
     var match = url.match(regExp);
-    return match && match[7].length == 11 ? match[7] : false;
+    return match && match[7].length === 11 ? match[7] : false;
   }
 
   const handleSubmit = async (e) => {
@@ -224,7 +233,7 @@ const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
 
   return (
     <Root onClick={(e) => e.stopPropagation()}>
-      <Heading>Add Youtube Video</Heading>
+      <Heading>Add Music</Heading>
 
       <div onClick={closeForm}>
         <Remove />
@@ -238,7 +247,7 @@ const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
         <FormGroup>
           <Input
             type="text"
-            label={"Video URL"}
+            label={"Youtube Search"}
             value={video}
             setValue={setVideo}
             onChangeCallback={onChangeCallback}
@@ -255,7 +264,7 @@ const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
             </Results>
           ) : null}
         </FormGroup>
-        <Button onClick={handleSubmit}>Add Video</Button>
+        <Button onClick={handleSubmit}>Add</Button>
       </Form>
     </Root>
   );

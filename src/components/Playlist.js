@@ -38,8 +38,8 @@ const PlaylistWrapper = styled.div`
     padding-left: 1rem;
     flex-direction: column;
     height: 100%;
-    max-height: calc(100% - 120px);
-    padding-bottom: 3rem;
+    max-height: calc(100% - 180px);
+    padding-bottom: 1rem;
     display: block;
   }
 `;

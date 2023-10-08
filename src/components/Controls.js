@@ -15,7 +15,7 @@ const Root = styled.div`
   z-index: 12;
   color: #fff;
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
 
   @media (max-width: 500px) {
     max-width: calc(100% - 2rem);

@@ -35,6 +35,10 @@ const InputElement = styled.input`
     background: #000;
     padding: 0 0.5rem;
   }
+
+  @media (max-width: 550px) {
+    padding: 0.5rem 0.5rem;
+  }
 `;
 
 const Label = styled.label`
@@ -101,6 +105,7 @@ const Input = ({
         onBlur={handleValidate}
         valid={valid}
         onChangeCallback={onChangeCallback}
+        setValue={setValue}
       />
       <Label hasValue={value && value.length > 0}>{label}</Label>
       <ValidationWrapper showValidiation={showValidiation}>
