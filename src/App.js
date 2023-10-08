@@ -49,7 +49,7 @@ const App = () => {
   const [init, setInit] = useState(false);
   const [ready, setReady] = useState(false);
   const [lowPowerMode, setLowPowerMode] = useState(false);
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(false);
   const [videoStatus, setVideoStatus] = useState(-1);
   const [volumeLevel, setVolumeLevel] = useState(10);
   const [videoTitle, setVideoTitle] = useState(null);
@@ -61,7 +61,7 @@ const App = () => {
   const [activeVideo, setActiveVideo] = useState(false);
   const [showGifForm, setShowGifForm] = useState(false);
   const [gifs, setGifs] = useState([]);
-  const [activeGifIndex, setActiveGifIndex] = useState(0);
+  const [activeGifIndex, setActiveGifIndex] = useState(false);
   const [currentGif, setCurrentGif] = useState(null);
 
   // use default playlist by default
@@ -108,6 +108,7 @@ const App = () => {
   const getRandom = (array, callback, exclude) => {
     const random = Math.floor(Math.random() * array.length);
     random !== exclude ? callback(random) : getRandom(array, callback);
+    return random;
   };
 
   const handleShuffleGif = () => {
@@ -201,6 +202,7 @@ const App = () => {
   useEffect(() => {
     if (videos && videos.length && videoElement) {
       try {
+        console.log("working with videoElement");
         play
           ? videoElement.target.playVideo()
           : videoElement.target.pauseVideo(); // pause/play
@@ -237,31 +239,49 @@ const App = () => {
   };
 
   useEffect(() => {
+    console.log("get-resources", gifs);
     try {
-      if (user && user.username && videoElement) {
-        getUserVideos();
-        getUserGifs();
+      if (user && user.username) {
+        getUserResources();
       } else {
-        getAllGifs();
-        getAllVideos();
+        setDefaultResources();
       }
     } catch (e) {
-      console.log(e);
+      console.log(e.message);
     }
   }, [user, setUser]);
 
-  const getUserStuff = async () => {
+  const getUserResources = async () => {
     await getUserVideos();
     await getUserGifs();
+    console.log("get resources");
+  };
+
+  const setDefaultResources = async () => {
+    await getAllGifs();
+    await getAllVideos();
+    console.log("set default resources");
   };
 
   useEffect(() => {
-    setCurrentGif(gifs[activeGifIndex]);
+    const random = Math.floor(Math.random() * gifs.length);
+    if (activeGifIndex === false) {
+      setCurrentGif(gifs[random]);
+    } else {
+      setCurrentGif(gifs[activeGifIndex]);
+    }
   }, [gifs, setActiveGifIndex, activeGifIndex]);
 
   useEffect(() => {
-    if (videos[currentVideoIndex]) {
-      setActiveVideo(videos[currentVideoIndex].key);
+    if (currentVideoIndex === false) {
+      const random = Math.floor(Math.random() * videos.length);
+      if (videos[random]) {
+        setActiveVideo(videos[random].key);
+      }
+    } else {
+      if (videos[currentVideoIndex]) {
+        setActiveVideo(videos[currentVideoIndex].key);
+      }
     }
   }, [videos, setCurrentVideoIndex, currentVideoIndex]);
 
@@ -271,6 +291,8 @@ const App = () => {
     if (loggedCofiUser) {
       const user = JSON.parse(loggedCofiUser);
       setUser(user);
+    } else {
+      setDefaultResources();
     }
   }, []);
 
