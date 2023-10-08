@@ -213,7 +213,7 @@ const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
 
   const onChangeCallback = (query) => {
     const apikey = `AIzaSyAxm8w2bNisg8AopAYteyPFEt91XW68eSY`;
-    const search = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${video}&type=video&key=${apikey}`;
+    const search = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${video}&type=video&key=${apikey}`;
 
     if (query !== "") {
       getData(search);

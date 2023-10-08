@@ -250,8 +250,6 @@ const GifForm = ({
       "&limit=" +
       lmt;
 
-    console.log(search_url);
-
     if (value !== "") {
       getData(search_url);
     } else {

@@ -67,7 +67,7 @@ const Input = ({
 }) => {
   const [showValidiation, setShowValidation] = useState(false);
   const [valid, setValid] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [search, setSearch] = useState("");
 
   const handleValidate = () => {
     if (validation) {
@@ -78,25 +78,18 @@ const Input = ({
 
   const onChange = (e) => {
     setValue(e.target.value);
-
-    if (onChangeCallback && !busy) {
-      onChangeCallback(e.target.value);
-      setBusy(true);
-    }
+    setSearch(e.target.value);
   };
 
-  useEffect(
-    function () {
-      const interval = setInterval(function () {
-        setBusy(false);
-      }, 1000);
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (onChangeCallback) {
+        onChangeCallback(value);
+      }
+    }, 500);
 
-      return function () {
-        clearTimeout(interval);
-      };
-    },
-    [setBusy, busy]
-  );
+    return () => clearTimeout(delayDebounceFn);
+  }, [search, setSearch]);
 
   return (
     <Root>
