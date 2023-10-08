@@ -289,12 +289,7 @@ const GifForm = ({
       )}
       <Form autoComplete="off">
         <FormGroup>
-          <Input
-            type="text"
-            label={"Search Tenor"}
-            value={value}
-            setValue={setValue}
-          />
+          <Input type="text" label={"Search Tenor"} />
         </FormGroup>
       </Form>
     </Root>

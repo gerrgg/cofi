@@ -93,41 +93,6 @@ const App = () => {
     );
   };
 
-  useEffect(() => {
-    try {
-      if (user && user.username) {
-        getUserVideos();
-        getUserGifs();
-      } else {
-        getAllGifs();
-        getAllVideos();
-      }
-
-      setActiveVideo(videos[currentVideoIndex].key);
-    } catch (e) {
-      console.log(e);
-    }
-  }, [user, setUser]);
-
-  useEffect(() => {
-    setCurrentGif(gifs[activeGifIndex]);
-  }, [gifs, setActiveGifIndex, activeGifIndex]);
-
-  useEffect(() => {
-    if (videos[currentVideoIndex]) {
-      setActiveVideo(videos[currentVideoIndex].key);
-    }
-  }, [videos, setCurrentVideoIndex, currentVideoIndex]);
-
-  useEffect(() => {
-    const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
-
-    if (loggedCofiUser) {
-      const user = JSON.parse(loggedCofiUser);
-      setUser(user);
-    }
-  }, []);
-
   const handleUserIconClick = () => {
     setShowUserModal(!showUserModal);
   };
@@ -225,6 +190,7 @@ const App = () => {
   // buggy
   useEffect(() => {
     if (videos && videos.length && videoElement) {
+      console.log("play video");
       try {
         play
           ? videoElement.target.playVideo()
@@ -260,6 +226,39 @@ const App = () => {
       }
     }
   };
+
+  useEffect(() => {
+    try {
+      if (user && user.username && videoElement) {
+        getUserVideos();
+        getUserGifs();
+      } else {
+        getAllGifs();
+        getAllVideos();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [user, setUser]);
+
+  useEffect(() => {
+    setCurrentGif(gifs[activeGifIndex]);
+  }, [gifs, setActiveGifIndex, activeGifIndex]);
+
+  useEffect(() => {
+    if (videos[currentVideoIndex]) {
+      setActiveVideo(videos[currentVideoIndex].key);
+    }
+  }, [videos, setCurrentVideoIndex, currentVideoIndex]);
+
+  useEffect(() => {
+    const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
+
+    if (loggedCofiUser) {
+      const user = JSON.parse(loggedCofiUser);
+      setUser(user);
+    }
+  }, []);
 
   function handler({ key, target }) {
     if (target !== document.body) return;
@@ -328,7 +327,7 @@ const App = () => {
         togglePause={togglePause}
       />
       <VideoWrapper>
-        {videos && activeVideo ? (
+        {videos.length && activeVideo ? (
           <YouTube
             style={{ zIndex: 1, position: "relative" }}
             videoId={activeVideo}
