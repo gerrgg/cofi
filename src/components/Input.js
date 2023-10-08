@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CheckMarkIcon from "../components/CheckMarkIcon";
 import XMarkIcon from "../components/XMarkIcon";
 
@@ -57,9 +57,17 @@ const ValidationWrapper = styled.div`
   display: ${(props) => (props.showValidiation ? "block" : "none")};
 `;
 
-const Input = ({ label, type, validation, value, setValue }) => {
+const Input = ({
+  label,
+  type,
+  validation,
+  value,
+  setValue,
+  onChangeCallback,
+}) => {
   const [showValidiation, setShowValidation] = useState(false);
   const [valid, setValid] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   const handleValidate = () => {
     if (validation) {
@@ -68,15 +76,38 @@ const Input = ({ label, type, validation, value, setValue }) => {
     }
   };
 
+  const onChange = (e) => {
+    setValue(e.target.value);
+
+    if (onChangeCallback && !busy) {
+      onChangeCallback(e.target.value);
+      setBusy(true);
+    }
+  };
+
+  useEffect(
+    function () {
+      const interval = setInterval(function () {
+        setBusy(false);
+      }, 1000);
+
+      return function () {
+        clearTimeout(interval);
+      };
+    },
+    [setBusy, busy]
+  );
+
   return (
     <Root>
       <InputElement
         value={value}
-        onChange={({ target }) => setValue(target.value)}
+        onChange={onChange}
         type={type}
         autoComplete="new-password"
         onBlur={handleValidate}
         valid={valid}
+        onChangeCallback={onChangeCallback}
       />
       <Label hasValue={value && value.length > 0}>{label}</Label>
       <ValidationWrapper showValidiation={showValidiation}>

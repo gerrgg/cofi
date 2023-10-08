@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "./Input";
 import axios from "axios";
 import videoService from "../services/video";
@@ -35,6 +35,7 @@ const FormGroup = styled.div`
   display: flex;
   gap: 5px;
   flex-direction: column;
+  position: relative;
 `;
 
 const Button = styled.button`
@@ -107,10 +108,53 @@ const Heading = styled.h2`
   }
 `;
 
+const Results = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0);
+  height: auto;
+  position: absolute;
+  top: 100%;
+  transform: translateY(0%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 1rem;
+  width: 100%;
+  max-height: 25vh;
+  overflow: auto;
+`;
+
+const SearchResultRoot = styled.div`
+  color: #fff;
+  font-size: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  padding-bottom: 0.5rem;
+  pointer: cursor;
+  cursor: pointer;
+
+  &:hover {
+    color: lightgreen;
+  }
+`;
+
+const SearchResult = ({ result, setVideo, setResults }) => {
+  const onClick = () => {
+    const url = `https://www.youtube.com/watch?v=${result.id.videoId}`;
+    setVideo(url);
+    setResults([]);
+  };
+  return (
+    <SearchResultRoot onClick={onClick}>
+      {result.snippet.title}
+    </SearchResultRoot>
+  );
+};
+
 const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
   const [video, setVideo] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
+  const [results, setResults] = useState([]);
 
   function youtube_parser(url) {
     var regExp =
@@ -158,6 +202,26 @@ const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
     setShowForm(false);
   };
 
+  const getData = async (search_url) => {
+    try {
+      const { data } = await axios.get(search_url);
+      setResults(data.items);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onChangeCallback = (query) => {
+    const apikey = `AIzaSyAxm8w2bNisg8AopAYteyPFEt91XW68eSY`;
+    const search = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${video}&type=video&key=${apikey}`;
+
+    if (query !== "") {
+      getData(search);
+    } else {
+      setResults([]);
+    }
+  };
+
   return (
     <Root onClick={(e) => e.stopPropagation()}>
       <Heading>Add Youtube Video</Heading>
@@ -177,7 +241,19 @@ const NewVideoForm = ({ user, setVideos, videos, setShowForm }) => {
             label={"Video URL"}
             value={video}
             setValue={setVideo}
+            onChangeCallback={onChangeCallback}
           />
+          {results && results.length ? (
+            <Results>
+              {results.map((result) => (
+                <SearchResult
+                  setVideo={setVideo}
+                  result={result}
+                  setResults={setResults}
+                ></SearchResult>
+              ))}
+            </Results>
+          ) : null}
         </FormGroup>
         <Button onClick={handleSubmit}>Add Video</Button>
       </Form>

@@ -231,8 +231,8 @@ const GifForm = ({
     setResults(data.results);
   };
 
-  useEffect(() => {
-    var apikey = " AIzaSyCNqelwphJXrYnLY-I-xbTNkiXgkwuwS_I";
+  const onChangeCallback = (query) => {
+    var apikey = "AIzaSyCNqelwphJXrYnLY-I-xbTNkiXgkwuwS_I";
     var clientkey = "my_test_app";
     var lmt = 25;
 
@@ -250,12 +250,14 @@ const GifForm = ({
       "&limit=" +
       lmt;
 
+    console.log(search_url);
+
     if (value !== "") {
       getData(search_url);
     } else {
       setResults([]);
     }
-  }, [value, setValue]);
+  };
 
   return (
     <Root showGifForm={showGifForm} onClick={(e) => e.stopPropagation()}>
@@ -269,7 +271,6 @@ const GifForm = ({
               key={result.id}
               result={result}
               setActiveGifIndex={setActiveGifIndex}
-              setValue={setValue}
             ></Gif>
           ))}
         </Results>
@@ -289,7 +290,12 @@ const GifForm = ({
       )}
       <Form autoComplete="off">
         <FormGroup>
-          <Input type="text" label={"Search Tenor"} />
+          <Input
+            onChangeCallback={onChangeCallback}
+            type="text"
+            label={"Search Tenor"}
+            setValue={setValue}
+          />
         </FormGroup>
       </Form>
     </Root>
