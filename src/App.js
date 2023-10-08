@@ -265,9 +265,12 @@ const App = () => {
 
   useEffect(() => {
     const random = Math.floor(Math.random() * gifs.length);
+
     if (activeGifIndex === false) {
+      console.log("set random gif");
       setCurrentGif(gifs[random]);
     } else {
+      console.log("set active gif");
       setCurrentGif(gifs[activeGifIndex]);
     }
   }, [gifs, setActiveGifIndex, activeGifIndex]);
@@ -277,6 +280,7 @@ const App = () => {
       const random = Math.floor(Math.random() * videos.length);
       if (videos[random]) {
         setActiveVideo(videos[random].key);
+        setCurrentVideoIndex(random);
       }
     } else {
       if (videos[currentVideoIndex]) {

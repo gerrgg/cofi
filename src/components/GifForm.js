@@ -163,9 +163,6 @@ const Gif = ({
         setGifs(gifs.concat(data));
       }
 
-      setValue("");
-      setResults([]);
-
       setActiveGifIndex(gifs.length);
       setAdded(true);
     } catch (e) {
@@ -218,8 +215,8 @@ const MyGif = ({
       if (g.id === result.id) {
         setActiveGifIndex(i);
         handleShowGifForm();
-        setResults([]);
-        setValue("");
+        // setResults([]);
+        // setValue("");
       }
     });
   };
@@ -318,6 +315,8 @@ const GifForm = ({
             onChangeCallback={onChangeCallback}
             type="text"
             setValue={setValue}
+            showClear={true}
+            label={"Search Tenor"}
           />
         </FormGroup>
       </Form>

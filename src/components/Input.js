@@ -7,6 +7,25 @@ const Root = styled.div`
   position: relative;
 `;
 
+const Remove = styled(XMarkIcon)`
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  transition: all 0.3s ease;
+  z-index: 100;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 500px) {
+    // width: 15px;
+    // height: 15px;
+  }
+`;
+
 const InputElement = styled.input`
   border: 0;
   apperance: none;
@@ -68,6 +87,7 @@ const Input = ({
   value,
   setValue,
   onChangeCallback,
+  showClear,
 }) => {
   const [showValidiation, setShowValidation] = useState(false);
   const [valid, setValid] = useState(false);
@@ -83,6 +103,14 @@ const Input = ({
   const onChange = (e) => {
     setValue(e.target.value);
     setSearch(e.target.value);
+  };
+
+  const handleClick = (e) => {
+    setValue("");
+    setSearch("");
+    e.target.parentElement.parentElement.parentElement.querySelector(
+      "input"
+    ).value = "";
   };
 
   useEffect(() => {
@@ -108,6 +136,12 @@ const Input = ({
         setValue={setValue}
       />
       <Label hasValue={value && value.length > 0}>{label}</Label>
+      {showClear && value !== "" ? (
+        <div onClick={handleClick}>
+          <Remove />
+        </div>
+      ) : null}
+
       <ValidationWrapper showValidiation={showValidiation}>
         {valid ? <CheckMarkIcon /> : <XMarkIcon />}
       </ValidationWrapper>
