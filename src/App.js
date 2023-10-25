@@ -66,30 +66,36 @@ const App = () => {
 
   // use default playlist by default
   const getAllVideos = async () => {
+    console.log("getAllVideos");
     const response = await axios.get(`/api/videos`);
     setVideos(response.data);
   };
 
   const getUserVideos = async () => {
+    console.log("getUserVideos");
     const response = await axios.get(`/api/users/${user.username}/videos`);
     setVideos(response.data);
   };
 
   const getAllGifs = async () => {
+    console.log("getAllGifs");
     const response = await axios.get(`/api/users/default/gifs`);
     setGifs(response.data);
   };
 
   const getUserGifs = async () => {
+    console.log("getUserGifs");
     const response = await axios.get(`/api/users/${user.username}/gifs`);
     setGifs(response.data);
   };
 
   const handleShowShortcuts = () => {
+    console.log("handleShowShortcuts");
     setShowShortcuts(!showShortcuts);
   };
 
   const handleCopyToClipboard = (e) => {
+    console.log("handleCopyToClipboard");
     e.preventDefault();
 
     navigator.clipboard.writeText(
@@ -98,20 +104,24 @@ const App = () => {
   };
 
   const handleUserIconClick = () => {
+    console.log("handleUserIconClick");
     setShowUserModal(!showUserModal);
   };
 
   const handleShowPlaylist = (e) => {
+    console.log("handleShowPlaylist");
     setShowPlaylist(!showPlaylist);
   };
 
   const getRandom = (array, callback, exclude) => {
+    console.log("getRandom");
     const random = Math.floor(Math.random() * array.length);
     random !== exclude ? callback(random) : getRandom(array, callback);
     return random;
   };
 
   const handleShuffleGif = () => {
+    console.log("handleShuffleGif");
     if (gifs.length !== 1 && videos.length !== 1) {
       // playBoop();
       getRandom(gifs, setActiveGifIndex, activeGifIndex);
@@ -123,6 +133,7 @@ const App = () => {
   };
 
   const handleNextVideo = () => {
+    console.log("handleNextVideo");
     setActiveGifIndex(
       activeGifIndex + 1 >= gifs.length ? 0 : activeGifIndex + 1
     );
@@ -137,6 +148,7 @@ const App = () => {
   };
 
   const handleSetVideo = (key) => {
+    console.log("handleSetVideo");
     if (key === activeVideo) return;
 
     let index = null;
@@ -166,6 +178,7 @@ const App = () => {
   });
 
   const handleSetVolume = (level) => {
+    console.log("handleSetVolume");
     let volume = 0;
 
     if (level < 1) {
@@ -184,6 +197,7 @@ const App = () => {
   };
 
   const togglePause = () => {
+    console.log("togglePause");
     if (!init) {
       setInit(true);
     }
@@ -239,22 +253,22 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log("get-resources", gifs);
+    console.log("get-resources", user);
     try {
       if (user && user.username) {
-        getUserResources();
-      } else {
-        setDefaultResources();
+        console.log("set user videos");
+        setVideos(user.videos);
+        setGifs(user.gifs);
       }
     } catch (e) {
       console.log(e.message);
     }
-  }, [user, setUser]);
+  }, [user, setUser, setVideos, videos]);
 
   const getUserResources = async () => {
     await getUserVideos();
     await getUserGifs();
-    console.log("get resources");
+    console.log("get getUserResources");
   };
 
   const setDefaultResources = async () => {
