@@ -28,7 +28,14 @@ const SuccessMessage = styled.span`
   font-style: italic;
 `;
 
-const UserModal = ({ setShowUserModal, showUserModal, setUser, user }) => {
+const UserModal = ({
+  setShowUserModal,
+  showUserModal,
+  setUser,
+  user,
+  getAllVideos,
+  getAllGifs,
+}) => {
   const [activeForm, setActiveForm] = useState("login");
   const [successMessage, setSuccessMessage] = useState();
   return (
@@ -59,6 +66,8 @@ const UserModal = ({ setShowUserModal, showUserModal, setUser, user }) => {
           setShowUserModal={setShowUserModal}
           setSuccessMessage={setSuccessMessage}
           successMessage={successMessage}
+          getAllVideos={getAllVideos}
+          getAllGifs={getAllGifs}
         />
       )}
     </Root>

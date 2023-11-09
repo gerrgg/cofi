@@ -197,9 +197,9 @@ const App = () => {
   };
 
   const togglePause = () => {
-    console.log("togglePause");
     if (!init) {
       setInit(true);
+      handleShuffleGif();
     }
 
     setPlay(!play);
@@ -304,14 +304,14 @@ const App = () => {
   }, [videos, setCurrentVideoIndex, currentVideoIndex]);
 
   useEffect(() => {
-    const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
+    // const loggedCofiUser = window.localStorage.getItem("loggedCofiUser");
 
-    if (loggedCofiUser) {
-      const user = JSON.parse(loggedCofiUser);
-      setUser(user);
-    } else {
-      setDefaultResources();
-    }
+    // if (loggedCofiUser) {
+    //   const user = JSON.parse(loggedCofiUser);
+    //   setUser(user);
+    // } else {
+    setDefaultResources();
+    // }
   }, []);
 
   function handler({ key, target }) {
@@ -414,6 +414,8 @@ const App = () => {
         showUserModal={showUserModal}
         setUser={setUser}
         user={user}
+        getAllVideos={getAllVideos}
+        getAllGifs={getAllGifs}
       />
       <Shortcuts
         handleShowShortcuts={handleShowShortcuts}

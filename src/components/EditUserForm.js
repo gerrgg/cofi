@@ -132,6 +132,8 @@ const EditUserForm = ({
   setShowUserModal,
   setSuccessMessage,
   setUser,
+  getAllVideos,
+  getAllGifs,
 }) => {
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
@@ -142,6 +144,8 @@ const EditUserForm = ({
   const handleLogout = () => {
     setUser(null);
     window.localStorage.clear();
+    getAllVideos();
+    getAllGifs();
   };
 
   const handleSubmit = async (e) => {
